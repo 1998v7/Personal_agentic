@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>IMAct 完整执行链路</title>
+<style>
+:root{color-scheme:light dark;--bg:light-dark(#f1f5fa,#101923);--panel:light-dark(#fff,#172635);--ink:light-dark(#16324e,#e2edf8);--muted:light-dark(#506b85,#aac0d4);--line:light-dark(#c9daeb,#3c556e);--blue:light-dark(#236db1,#83bff4);--soft:light-dark(#eaf3fc,#1c3851);--red:light-dark(#a12f32,#ffadaa)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.7 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}header,main,footer{max-width:1300px;margin:auto;padding:24px}h1{font-size:28px;margin:0 0 12px}h2{font-size:19px;margin:8px 0}h3{font-size:16px;margin:12px 0 6px}p{margin:8px 0}a{color:var(--blue)}button{font:inherit;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:8px 14px;cursor:pointer}.actors{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:18px 0}.actors span{background:var(--soft);padding:8px 14px;border-radius:6px}.actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center}.meta{font-size:12px;color:var(--muted)}.question{font-size:19px}.step{display:grid;grid-template-columns:135px minmax(0,1fr);gap:20px;position:relative;margin:0 0 18px}.track{padding-top:14px;color:var(--muted)}.track strong{display:block;color:var(--blue);font-size:20px}.track:after{content:"↓";display:block;color:var(--blue);margin:14px 0}.node{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--blue);border-radius:8px;padding:18px;min-width:0}.node.error{border-left-color:var(--red)}.route{color:var(--blue);font-size:13px}.error-text{color:var(--red)}.text{white-space:pre-wrap;overflow-wrap:anywhere}.node pre{font:12px/1.7 ui-monospace,SFMono-Regular,monospace;white-space:pre-wrap;overflow-wrap:anywhere;margin:10px 0;max-height:650px;overflow:auto;background:var(--bg);padding:12px;border-radius:5px}details{margin-top:12px}summary{cursor:pointer;color:var(--blue)}table{border-collapse:collapse;width:100%;table-layout:fixed}th,td{text-align:left;vertical-align:top;border-bottom:1px solid var(--line);padding:8px;overflow-wrap:anywhere}th:first-child{width:22%}td pre{margin:0!important;max-height:350px!important}.final{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:20px;margin-bottom:24px}.final pre{white-space:pre-wrap;overflow-wrap:anywhere}.legend{color:var(--muted)}footer{font-size:13px;color:var(--muted)}@media(max-width:650px){header,main,footer{padding:14px}.step{grid-template-columns:1fr;gap:3px}.track{display:flex;gap:12px;align-items:center;padding:0}.track strong{font-size:16px}.track:after{display:none}.node{padding:13px}h1{font-size:23px}table,tbody,tr,td{display:block}thead{display:none}td:before{content:attr(data-label);display:block;font-weight:600}}
+</style>
+<header>
+  <div class="meta">IMAct / VitaBench · 按真实事件顺序展示</div>
+  <h1 id="chain-title">完整执行链路</h1>
+  <p id="chain-question" class="question"></p>
+  <div class="actors"><span>用户 / 用户模拟器</span>→<span>Memory</span>→<span>Harness 读取 Task State / Working Memory</span>→<span>Action 模型</span>→<span>校验、提交状态、执行工具</span>↻</div>
+  <p id="chain-status"></p>
+  <p class="legend">下方保留全部采集节点；同一消息的“生成”和“接收”是不同阶段，使用事件 ID 与 call_id 关联。模型提案与实际写入分别显示。</p>
+  <p class="legend">状态循环：已提交的 Task State → current_task；未解决的 Working Memory 笔记 → active_notes → 模型输入 → 本轮修改提案 → 校验提交 → 后续模型输入。首轮两项为空，原始问题与长期 Memory 分别由 original_query、user_memory 提供。</p>
+  <div class="actions"><button id="chain-expand" type="button">展开全部原文</button><button id="chain-collapse" type="button">折叠原文</button><a href="#chain-final">跳到最终结果</a><a href="full_trace.json">完整 Trace JSON</a><a href="rounds.html">按模型轮次对照</a></div>
+</header>
+<main><div id="chain-timeline" aria-label="完整执行时间线"></div><section id="chain-final" class="final"></section></main>
+<footer>模型与 Memory 为真实外部请求；业务工具在 VitaBench 模拟环境中执行。是否评分及 rubric 结果见页尾；业务完成证据与裁判评分分别记录。</footer>
+<script type="application/json" id="chain-data">__CHAIN_DATA__</script>
+<script>
+(() => {
+ const D=JSON.parse(document.getElementById('chain-data').textContent),R=D.records,M=D.manifest,S=D.summary;
+ const J=x=>typeof x==='string'?x:JSON.stringify(x,null,2),el=(tag,text,parent,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;if(parent)parent.append(n);return n};
+ const details=[];
+ function raw(parent,title,value){const d=el('details',undefined,parent);el('summary',title,d);const p=el('pre',undefined,d);const populate=()=>{if(!p.dataset.ready){p.textContent=J(value);p.dataset.ready='1';}};d.addEventListener('toggle',()=>{if(d.open)populate();});details.push({d,populate});return d;}
+ const names={judge_request:'裁判请求',judge_response:'裁判返回',judge_error:'裁判 API 错误',grading_start:'开始评分',grading_result:'评分结果',grading_error:'评分失败',case_start:'读取原始用户任务',memory_request:'请求 Memory',memory_response:'Memory 原始返回',memory_error:'Memory 请求失败',memory_normalized:'准备注入的 Memory',user_reply:'用户发言',benchmark_feedback:'接收用户 / 工具反馈',harness_event:'提交事件给 Harness',action_input:'Action 完整输入',action_output:'Action 完整返回与修改提案',action_error:'Action 调用失败',harness_error:'校验拒绝，进入重试',harness_result:'Harness 输出动作',workspace_committed:'Working Memory 实际写入',conversation_end:'对话结束',case_end:'运行结束',case_error:'运行异常'};
+ function route(r){const d=r.data;return ({case_start:'原始任务 → 外层',memory_request:'Harness / 外层 → Memory 服务',memory_response:'Memory 服务 → Harness / 外层',memory_error:'Memory 服务 → Harness / 外层',memory_normalized:'Memory → 首轮上下文',user_reply:'用户 / 用户模拟器 → 外层',benchmark_feedback:(d.messages||[]).some(m=>m.role==='tool')?'工具环境 → Harness':'用户消息 → Harness',harness_event:'外层 → Harness',action_input:'Harness → Action 模型',action_output:'Action 模型 → Harness',action_error:'模型服务 → Harness',harness_error:'Harness → Action 重试',harness_result:d.output?.action?.type==='call_tools'?'Harness → 工具环境':d.output?.action?.type==='query_memory'?'Harness → Memory':'Harness → 用户',workspace_committed:'Harness 校验 / 原子提交 → Working Memory',conversation_end:'用户停止 → 外层收尾',case_end:'外层 → 运行记录',case_error:'外层 → 异常记录'})[r.stage]||r.stage;}
+ function noteMap(value){if(!Array.isArray(value))return value||{};return Object.fromEntries(value.map(n=>{const v=n.value;return [v.kind+':'+String(v.item_id??v.attempt??v.note_id??v.topic),n];}));}
+ function diff(before,after){return [...new Set([...Object.keys(before),...Object.keys(after)])].sort().filter(k=>JSON.stringify(before[k])!==JSON.stringify(after[k])||!(k in before)||!(k in after)).map(k=>[k,k in before?J(before[k]):'未设置',k in after?J(after[k]):'已删除']);}
+ function changes(parent,title,rows){el('h3',title,parent);if(!rows.length){el('p','本次无变化',parent,'meta');return;}const t=el('table',undefined,parent),h=el('tr',undefined,el('thead',undefined,t));['字段 / 笔记','写入前','写入后'].forEach(x=>el('th',x,h));const b=el('tbody',undefined,t);rows.forEach(values=>{const tr=el('tr',undefined,b);values.forEach((v,i)=>{const td=el('td',undefined,tr);td.dataset.label=['字段 / 笔记','写入前','写入后'][i];el('pre',v,td);});});}
+ function action(parent,a){if(!a)return;const labels={call_tools:'调用工具',query_memory:'查询 Memory',reply_user:'回复用户'};el('p',(labels[a.type]||a.type)+(a.mode?' · '+a.mode:'')+(a.outcome?' · '+a.outcome:''),parent);if(a.content)el('p',a.content,parent,'text');if(a.question)el('p',a.question,parent,'text');for(const c of a.calls||[]){el('h3',c.name,parent);el('pre',J(c.arguments),parent);if(c.call_id)el('p','call_id: '+c.call_id,parent,'meta');}}
+ const attempts=D.attempts;let inputNumber=0;const previous={};
+ const injectionBySeq=new Map((D.context_injection||[]).map(x=>[x.input_seq,x]));
+ document.getElementById('chain-title').textContent=(M.domain||'任务')+' · '+(M.subtask_id||'完整执行链路');
+ document.getElementById('chain-question').textContent=M.instruction||'';
+ document.getElementById('chain-status').textContent=R.length+' 个原始采集节点 · '+attempts.length+' 次模型尝试 · '+(D.completed?'Harness 已核验目标完成':'尚无 Harness 完成证据')+' · '+(S.termination_reason||M.status||'运行中');
+ const target=document.getElementById('chain-timeline');
+ for(const r of R){const row=el('section',undefined,target,'step');row.id='chain-event-'+r.seq;const track=el('div',undefined,row,'track');el('strong','#'+r.seq,track);el('span',new Intl.DateTimeFormat('zh-CN',{timeZone:'Asia/Shanghai',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).format(new Date(r.time)),track,'meta');const node=el('div',undefined,row,'node'+(r.stage.includes('error')?' error':''));el('div',route(r),node,'route');el('h2',names[r.stage]||r.stage,node);if(r.correlation.event_id)el('p','event_id: '+r.correlation.event_id,node,'meta');const d=r.data;
+  if(r.stage==='case_start')el('p',d.instruction,node,'text');
+  if(r.stage==='judge_request')raw(node,'完整裁判输入与参数',d);
+  if(r.stage==='judge_response'){el('p',d.content,node,'text');raw(node,'request_id / 模型 / usage',d);}
+  if(r.stage==='grading_result')raw(node,'Reward 与逐项 rubric',d);
+  if(r.stage==='grading_error'||r.stage==='judge_error')el('p',d.error,node,'error-text');
+  if(r.stage==='memory_request')raw(node,'完整 Memory 请求',d);
+  if(r.stage==='memory_response')raw(node,'完整 Memory 响应',d);
+  if(r.stage==='memory_normalized'){el('p','状态：'+d.payload.status,node,d.payload.status==='ok'?'':'error-text');el('p',d.payload.context||d.payload.error||'没有返回正文',node,'text');}
+  if(r.stage==='user_reply'){el('p',d.message.content||'',node,'text');if(d.message.raw_data)raw(node,'用户模型的完整返回',d.message);}
+  if(r.stage==='benchmark_feedback'){for(const m of d.messages||[]){if(m.role==='tool'){el('h3',m.name,node);el('p','call_id: '+m.id+' · 工具 error 标记：'+Boolean(m.error),node,'meta');raw(node,'完整工具回执',m.content);}else el('p',m.content||'',node,'text');}}
+  if(r.stage==='harness_event'){el('p','事件类型：'+d.request.event.type+' · base_rev='+d.request.base_rev+' · 重试序号 '+d.retry_index,node);raw(node,'完整事件输入',d.request);}
+  if(r.stage==='action_input'){
+   inputNumber++;const c=d.context.input,a=injectionBySeq.get(r.seq);
+   el('p','第 '+inputNumber+' 次模型调用 · '+c.candidates.length+' 个候选 · '+c.user_memory.length+' 条长期 Memory',node);
+   el('h3','本轮真正传入模型的 Task State / Working Memory',node);
+   if(a){el('p',a.serialized_fields_match_context?'已核对：下方两项与模型 user 消息 JSON 中的值完全一致。':'模型消息字段未通过一致性核对，请检查原始记录。',node,a.serialized_fields_match_context?'meta':'error-text');
+    if(a.source_commit_seq!==null){const link=el('a','状态来源：已提交 rev='+a.source_rev+'，节点 #'+a.source_commit_seq,node);link.href='#chain-event-'+a.source_commit_seq;}
+    else el('p',a.source_rev===0?'状态来源：首轮初始状态，尚无已提交决策。':'状态来源：本轨迹未记录前置提交快照。',node,'meta');
+   }
+   el('h3','Task State → current_task',node);el('pre',J(c.current_task),node);
+   el('h3','Working Memory 笔记 → active_notes（'+c.active_notes.length+' 条）',node);el('pre',J(c.active_notes),node);
+   if(a?.resolved_notes_not_in_active_notes)el('p',a.resolved_notes_not_in_active_notes+' 条已解决笔记未进入 active_notes；完整笔记仍保存在提交快照中。',node,'meta');
+   el('p','本轮新产生的 task_changes / working_notes 是输出提案，通过校验后才供后续调用读取。',node,'meta');
+   raw(node,'业务执行状态 → business_state（订单、进度、在途调用）',c.business_state);
+   if(a)raw(node,'状态来源与模型消息一致性核验',a);
+   raw(node,'完整模型消息（provider 转换前）',d.messages_before_provider);raw(node,'完整 Harness 上下文（含策略、工具、Memory、状态和 schema）',d.context);raw(node,'本次模型参数',d.params);
+  }
+  if(r.stage==='action_output'){const a=attempts[inputNumber-1]||{};let v;try{v=typeof d.content==='string'?JSON.parse(d.content):d.content;}catch{}el('p',a.error?'该提案被拒绝，未直接写入':'该提案的提交结果见后续 Harness 节点',node,a.error?'error-text':'meta');if(v){raw(node,'Task State 修改提案',v.task_changes);raw(node,'Working Memory 修改提案',v.working_notes);action(node,v.next_action);}raw(node,'完整模型返回正文',d.content);if(d.reasoning)raw(node,'服务实际返回的 reasoning 字段',d.reasoning);raw(node,'request_id / finish_reason / usage',d.metadata);}
+  if(r.stage==='action_error')el('p',d.error,node,'error-text');
+  if(r.stage==='harness_error')el('p',(d.code||'')+'：'+d.error,node,'error-text');
+  if(r.stage==='harness_result'){el('p','提交版本 rev='+d.output.rev,node,'meta');action(node,d.output.action);}
+  if(r.stage==='workspace_committed'){const tid=r.correlation.task_id,before=previous[tid]||{},after=d.workspace;el('p','真实数据库快照 · rev='+d.rev+' · 候选数 '+d.candidate_count,node,'meta');changes(node,'Task State 变化',diff(before.task||{},after.task||{}));changes(node,'Working Memory 笔记变化',diff(noteMap(before.notes),noteMap(after.notes)));const reads=(D.context_injection||[]).filter(x=>x.source_commit_seq===r.seq);el('h3','提交状态 → 后续模型输入',node);if(!reads.length)el('p','本轨迹没有后续 Action 输入读取此版本。',node,'meta');for(const read of reads){const p=el('p',undefined,node),link=el('a','查看输入节点 #'+read.input_seq+'（'+read.event_id+'，'+read.active_note_count+' 条工作笔记）',p);link.href='#chain-event-'+read.input_seq;}raw(node,'本次提交后的全部状态',after);previous[tid]=after;}
+  if(r.stage==='conversation_end'||r.stage==='case_end')el('p','终止原因：'+d.termination_reason,node);
+  if(r.stage==='case_error'||r.stage==='memory_error')el('p',d.error,node,'error-text');
+  raw(node,'原始采集记录 #'+r.seq,r);
+ }
+ const final=document.getElementById('chain-final');if(S.evaluation==='completed'||S.evaluation==='rule_only'||S.evaluation==='error'){el('h2','裁判评分',final);el('p','评分状态：'+S.evaluation+' · reward='+S.reward,final);const a=el('a','查看逐项评分及完整裁判输入输出',final);a.href='grading.html';}el('h2','最终结果与完成证据',final);el('p',D.completed?'Harness 根据可追溯证据确认目标完成。':'对话结束，但尚无 Harness 目标完成证据。',final);D.completion_actions.forEach(a=>action(final,a));raw(final,'完成动作的证据引用',D.completion_actions);raw(final,'最终任务、订单与在途状态',S.final_workspaces.map(x=>({task_id:x.task_id,rev:x.rev,task:x.workspace.task,orders:x.workspace.orders,pending_calls:x.workspace.pending_calls,pending_memory:x.workspace.pending_memory,progress:x.workspace.progress})));raw(final,'本次模型、Memory 与用户模拟器配置',M);
+ document.getElementById('chain-expand').onclick=()=>details.forEach(x=>{x.populate();x.d.open=true;});document.getElementById('chain-collapse').onclick=()=>details.forEach(x=>x.d.open=false);
+})();
+</script>
+</html>

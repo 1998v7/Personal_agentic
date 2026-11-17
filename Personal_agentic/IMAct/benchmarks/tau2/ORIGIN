@@ -1,0 +1,9 @@
+本目录中的 data_model/、environment/、domains/、utils/ 派生自 τ²-bench(tau2-bench 2.0.0,MIT,见 LICENSE),
+按 IMAct 的需要做了裁剪与改写:去掉对上游 `tau2` 包、loguru、litellm 的依赖,消息模型改用 IMAct.harness.messages,
+文件读写统一 UTF-8(上游依赖系统默认编码,在 Windows 上会按 GBK 读)。
+
+prompt_templates/ 里的 agent 与用户模拟器模板由上游代码原样导出;persona.py 复现上游按 (seed, task) 确定性分配人设的规则。
+IMAct/harness/(对话循环、用户模拟器)与 IMAct/evaluation/tau2.py(评分)按上游 orchestrator、user、evaluator 的行为重新实现。
+
+数据集不随源码提交。查找顺序:环境变量 IMACT_TAU2_DATA → data/。
+这部分是 bench 专属代码,放弃 τ² 时整个目录删除即可,不影响 harness/ 与 evaluation/base.py。

@@ -1,0 +1,10 @@
+# VitaBench 的用户模拟器 / 评测器走 OpenRouter。用 VITA_MODEL_CONFIG_PATH 指向本文件,不改 VitaBench 目录。
+default:
+  base_url: https://openrouter.ai/api/v1
+  api_key: ${OPENROUTER_API_KEY}
+  temperature: 0.0
+  max_input_tokens: 128000
+models:
+  - name: openai/gpt-4.1
+    max_tokens: 8192
+    cost_1m_token_dollar: {prompt_price: 2.00, completion_price: 8.00}

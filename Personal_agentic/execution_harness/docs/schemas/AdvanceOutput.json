@@ -1,0 +1,181 @@
+{
+  "$defs": {
+    "MemoryAction": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "query_memory",
+          "title": "Type",
+          "type": "string"
+        },
+        "request_id": {
+          "minLength": 1,
+          "title": "Request Id",
+          "type": "string"
+        },
+        "question": {
+          "minLength": 1,
+          "title": "Question",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "request_id",
+        "question"
+      ],
+      "title": "MemoryAction",
+      "type": "object"
+    },
+    "OutgoingCall": {
+      "additionalProperties": false,
+      "properties": {
+        "call_id": {
+          "minLength": 1,
+          "title": "Call Id",
+          "type": "string"
+        },
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "arguments": {
+          "additionalProperties": true,
+          "title": "Arguments",
+          "type": "object"
+        }
+      },
+      "required": [
+        "call_id",
+        "name",
+        "arguments"
+      ],
+      "title": "OutgoingCall",
+      "type": "object"
+    },
+    "ReplyAction": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "reply_user",
+          "title": "Type",
+          "type": "string"
+        },
+        "mode": {
+          "enum": [
+            "ask",
+            "inform",
+            "final"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "content": {
+          "minLength": 1,
+          "title": "Content",
+          "type": "string"
+        },
+        "outcome": {
+          "anyOf": [
+            {
+              "enum": [
+                "completed",
+                "partial",
+                "blocked"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Outcome"
+        },
+        "evidence_refs": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence Refs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "type",
+        "mode",
+        "content"
+      ],
+      "title": "ReplyAction",
+      "type": "object"
+    },
+    "ToolAction": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "call_tools",
+          "title": "Type",
+          "type": "string"
+        },
+        "calls": {
+          "items": {
+            "$ref": "#/$defs/OutgoingCall"
+          },
+          "title": "Calls",
+          "type": "array"
+        }
+      },
+      "required": [
+        "type",
+        "calls"
+      ],
+      "title": "ToolAction",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "task_id": {
+      "title": "Task Id",
+      "type": "string"
+    },
+    "event_id": {
+      "title": "Event Id",
+      "type": "string"
+    },
+    "rev": {
+      "title": "Rev",
+      "type": "integer"
+    },
+    "action": {
+      "discriminator": {
+        "mapping": {
+          "call_tools": "#/$defs/ToolAction",
+          "query_memory": "#/$defs/MemoryAction",
+          "reply_user": "#/$defs/ReplyAction"
+        },
+        "propertyName": "type"
+      },
+      "oneOf": [
+        {
+          "$ref": "#/$defs/ToolAction"
+        },
+        {
+          "$ref": "#/$defs/MemoryAction"
+        },
+        {
+          "$ref": "#/$defs/ReplyAction"
+        }
+      ],
+      "title": "Action"
+    }
+  },
+  "required": [
+    "task_id",
+    "event_id",
+    "rev",
+    "action"
+  ],
+  "title": "AdvanceOutput",
+  "type": "object"
+}

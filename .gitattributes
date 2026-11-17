@@ -1,0 +1,11 @@
+# 换行符:仓库里统一存 LF。Windows 上 checkout 成 CRLF 会让 Linux / WSL 的 bash 直接报
+# `$'\r': command not found`,而且会把整个 uni-agent 显示成"全文件改动"。
+* text=auto eol=lf
+
+# 二进制与压缩数据不做换行转换
+*.png binary
+*.jpg binary
+*.gz binary
+*.parquet binary
+*.sqlite3 binary
+*.safetensors binary

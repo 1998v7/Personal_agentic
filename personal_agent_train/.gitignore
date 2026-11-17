@@ -1,0 +1,10 @@
+# 运行产物
+__pycache__/
+*.pyc
+runs/
+smoke/
+data/
+*.parquet
+*.log
+# 不要提交任何密钥:密钥都在 IMAct 侧的 .env(由那个仓库 ignore)
+.env

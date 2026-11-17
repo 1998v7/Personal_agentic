@@ -1,0 +1,881 @@
+{
+  "revision": "f60169e89f30499cb7883f3dad76bd03facc908d",
+  "mode": "actual_upstream_handlers_synthetic_database",
+  "files": {
+    "src/vita/domains/delivery/tools.py": "d56eb645b4e311834a67bdf7aa2cbee317c081563e75773f8069b326033e0ef3",
+    "src/vita/domains/delivery/data_model.py": "0e7a14fbc5a882c94ee82c229b06ea35baaa76a4c611045538e6ab005a628076",
+    "src/vita/domains/instore/tools.py": "98417e1e1910f4f41cdca82e91e68861f24e8931702030c41b61252bb010e9c7",
+    "src/vita/domains/instore/data_model.py": "716f331ba7ff099885db9db15ac31d9cf20a92f90c1efb4e7da4c83983b36037",
+    "src/vita/domains/ota/tools.py": "a7b8f130c629df6ce5f43c45ddd8d656e7d9e3c0a682296ff5798a85bfb56a9e",
+    "src/vita/domains/ota/data_model.py": "1ca2290674ced601801934b4d669922444c9721c296b647f3f116282c4dd39e4",
+    "src/vita/environment/toolkit.py": "6e3e6e981bddc8c44c412ed418541c8d8a4c4b680c301727d4c68a97ab281f91",
+    "src/vita/data_model/tasks.py": "71b7a86fbe33d1f2f380ab7046e0c4a06df9acfe13b1a39fabc3754984b07cda"
+  },
+  "receipts": [
+    {
+      "domain": "delivery",
+      "name": "delivery_store_search_recommand",
+      "arguments": {
+        "keywords": [
+          "饭"
+        ]
+      },
+      "content": "Store(name=测试餐厅(分店), store_id=S1, score=4.8, location=北京测试路1号 longitude:116.4,latitude:39.9, tags=['饭'])",
+      "exception": null,
+      "state_changed": false
+    },
+    {
+      "domain": "delivery",
+      "name": "delivery_product_search_recommand",
+      "arguments": {
+        "keywords": [
+          "饭"
+        ]
+      },
+      "content": "StoreProduct(store_name=测试餐厅(分店), store_id=S1, product_name=饭(小份), product_id=P1, attributes=, quantity=10, price=20.0, tags=['清淡'])",
+      "exception": null,
+      "state_changed": false
+    },
+    {
+      "domain": "delivery",
+      "name": "get_delivery_store_info",
+      "arguments": {
+        "store_id": "S1"
+      },
+      "content": "Store(name=测试餐厅(分店), store_id=S1, score=4.8, location=北京测试路1号 longitude:116.4,latitude:39.9, tags=['饭']), products=StoreProduct(store_name=测试餐厅(分店), store_id=S1, product_name=饭(小份), product_id=P1, attributes=, quantity=10, price=20.0, tags=['清淡'])",
+      "exception": null,
+      "state_changed": false
+    },
+    {
+      "domain": "delivery",
+      "name": "get_delivery_product_info",
+      "arguments": {
+        "product_id": "P1"
+      },
+      "content": "StoreProduct(store_name=测试餐厅(分店), store_id=S1, product_name=饭(小份), product_id=P1, attributes=, quantity=10, price=20.0, tags=['清淡'])",
+      "exception": null,
+      "state_changed": false
+    },
+    {
+      "domain": "delivery",
+      "name": "create_delivery_order",
+      "arguments": {
+        "user_id": "fixture_user",
+        "store_id": "S1",
+        "product_ids": [
+          "P1"
+        ],
+        "product_cnts": [
+          1
+        ],
+        "address": "北京测试路1号",
+        "dispatch_time": "2026-11-05 12:00:00"
+      },
+      "content": "Order(order_id:OTd32b141feb, order_type:delivery, user_id:fixture_user, store_id:S1, dispatch_time:2026-11-05 12:00:00, shipping_time:25.0, delivery_time:2026-11-05 12:25:00, total_price:20.0, create_time:2026-11-05 09:00:00, update_time:2026-11-05 09:00:00, note:, status:unpaid, products:[StoreProduct(store_name=测试餐厅(分店), store_id=S1, product_name=饭(小份), product_id=P1, attributes=, quantity=1, price=20.0, tags=['清淡'])])",
+      "exception": null,
+      "state_changed": true
+    },
+    {
+      "domain": "delivery",
+      "name": "search_delivery_orders",
+      "arguments": {
+        "user_id": "fixture_user",
+        "status": "unpaid"
+      },
+      "content": "Order(order_id:OTd32b141feb, order_type:delivery, user_id:fixture_user, store_id:S1, total_price:20.0, create_time:2026-11-05 09:00:00, update_time:2026-11-05 09:00:00, status:unpaid, ",
+      "exception": null,
+      "state_changed": false
+    },
+    {
+      "domain": "delivery",
+      "name": "get_delivery_order_detail",
+      "arguments": {
+        "order_id": "OTd32b141feb"
+      },
+      "content": "Order(order_id:OTd32b141feb, order_type:delivery, user_id:fixture_user, store_id:S1, dispatch_time:2026-11-05 12:00:00, shipping_time:25.0, delivery_time:2026-11-05 12:25:00, total_price:20.0, create_time:2026-11-05 09:00:00, update_time:2026-11-05 09:00:00, note:, status:unpaid, products:[StoreProduct(store_name=测试餐厅(分店), store_id=S1, product_name=饭(小份), product_id=P1, attributes=, quantity=1, price=20.0, tags=['清淡'])])",
+      "exception": null,
+      "state_changed": false
+    },
+    {
+      "domain": "delivery",
+      "name": "modify_delivery_order",
+      "arguments": {
+        "order_id": "OTd32b141feb",
+        "note": "少盐"
+      },
+      "content": "Order OTd32b141feb has been modified.",
+      "exception": null,
+      "state_changed": true
+    },
+    {
+      "domain": "delivery",
+      "name": "pay_delivery_order",
+      "arguments": {
+        "order_id": "OTd32b141feb"
+      },
+      "content": "Payment successful",
+      "exception": null,
+      "state_changed": true
+    },
+    {
+      "domain": "delivery",
+      "name": "get_delivery_order_status",
+      "arguments": {
+        "order_id": "OTd32b141feb"
+      },
+      "content": "paid",
+      "exception": null,
+      "state_changed": false
+    },
+    {
+      "domain": "delivery",
+      "name": "get_user_all_orders",
+      "arguments": {},
+      "content": "Order(order_id:OTd32b141feb, order_type:delivery, user_id:fixture_user, store_id:S1, dispatch_time:2026-11-05 12:00:00, shipping_time:25.0, delivery_time:2026-11-05 12:25:00, total_price:20.0, create_time:2026-11-05 09:00:00, update_time:2026-11-05 09:00:00, note:少盐, status:paid, products:[StoreProduct(store_name=测试餐厅(分店), store_id=S1, product_name=饭(小份), product_id=P1, attributes=, quantity=1, price=20.0, tags=['清淡'])])",
+      "exception": null,
+      "state_changed": false
+    },
+    {
+      "domain": "delivery",
+      "name": "cancel_delivery_order",
+      "arguments": {
+        "order_id": "OTd32b141feb"
+      },
+      "content": "Order OTd32b141feb has been cancelled.",
+      "exception": null,
+      "state_changed": true
+    },
+    {
+      "domain": "delivery",
+      "name": "delivery_distance_to_time",
+      "arguments": {
+        "distance": 1000.0
+      },
+      "content": 32.0,
+      "exception": null,
+      "state_changed": false
+    },
+    {
+      "domain": "delivery",
+      "name": "longitude_latitude_to_distance",
+      "arguments": {
+        "longitude1": 116.4,
+        "latitude1": 39.9,
+        "longitude2": 116.41,
+        "latitude2": 39.91
+      },
+      "content": 1401.0,
+      "exception": null,
+      "state_changed": false
+    },
+    {
+      "domain": "delivery",
+      "name": "address_to_longitude_latitude",
+      "arguments": {
+        "address": "北京测试路1号"
+      },
+      "content": [
+        116.4,
+        39.9
+      ],
+      "exception": null,
+      "state_changed": false
+    },
+    {
+      "domain": "delivery",
+      "name": "weather",
+      "arguments": {
+        "address": "北京测试路1号",
+        "date_start": "2026-11-06",
+        "date_end": "2026-11-07"
+      },
+      "content": "city: 北京测试路1号, weather: 晴, datetime: 2026-11-06, temperature: 10.0~20.0, humidity: 50.0",
+      "exception": null,
+      "state_changed": false
+    },
+    {
+      "domain": "delivery",
+      "name": "get_date_holiday_info",
+      "arguments": {
+        "date": "2026-10-01"
+      },
+      "content": "国庆节",
+      "exception": null,
+      "state_changed": false
+    },
+    {
+      "domain": "delivery",
+      "name": "get_holiday_date",
+      "arguments": {
+        "year": "2026",
+        "holiday_name": "国庆节"
+      },
+      "content": "Holiday data for year 2026 not found",
+      "exception": null,
+      "state_changed": false
+    },
+    {
+      "domain": "delivery",
+      "name": "get_nearby",
+      "arguments": {
+        "longitude": 116.4,
+        "latitude": 39.9,
+        "range": 1000.0
+      },
+      "content": "Store(name=测试餐厅(分店), store_id=S1, score=4.8, location=北京测试路1号 longitude:116.4,latitude:39.9, tags=['饭'])",
+      "exception": null,
+      "state_changed": false
+    },
+    {
+      "domain": "instore",
+      "name": "instore_shop_search_recommend",
+      "arguments": {
+        "keywords": [
+          "饭"
+        ]
+      },
+      "content": "Shop(shop_name=测试到店餐厅, shop_id=I1, score=4.8, location=北京测试路1号 longitude:116.4,latitude:39.9, tags=['饭'], enable_book=True, book_price=10.0, enable_reservation=True)",
+      "exception": null,
+      "state_changed": false
+    },
+    {
+      "domain": "instore",
+      "name": "instore_product_search_recommend",
+      "arguments": {
+        "keywords": [
+          "饭"
+        ]
+      },
+      "content": "ShopProduct(shop_id=I1, product_id=IP1, name=饭(小份), price=20.0, quantity=10, tags=['清淡'])",
+      "exception": null,
+      "state_changed": false
+    },
+    {
+      "domain": "instore",
+      "name": "create_instore_product_order",
+      "arguments": {
+        "user_id": "fixture_user",
+        "shop_id": "I1",
+        "product_id": "IP1",
+        "quantity": 1
+      },
+      "content": "Order(order_id:OI97cabeb7a1, order_type:instore, user_id:fixture_user, shop_id:I1, total_price:20.0, create_time:2026-11-05 09:00:00, update_time:2026-11-05 09:00:00, status:unpaid, products:[ShopProduct(shop_id=I1, product_id=IP1, name=饭(小份), price=20.0, quantity=1, tags=['清淡'])])",
+      "exception": null,
+      "state_changed": true
+    },
+    {
+      "domain": "instore",
+      "name": "get_instore_orders",
+      "arguments": {
+        "user_id": "fixture_user"
+      },
+      "content": "Order(order_id:OI97cabeb7a1, order_type:instore, user_id:fixture_user, shop_id:I1, total_price:20.0, create_time:2026-11-05 09:00:00, update_time:2026-11-05 09:00:00, status:unpaid, products:[ShopProduct(shop_id=I1, product_id=IP1, name=饭(小份), price=20.0, quantity=1, tags=['清淡'])])",
+      "exception": null,
+      "state_changed": false
+    },
+    {
+      "domain": "instore",
+      "name": "pay_instore_order",
+      "arguments": {
+        "order_id": "OI97cabeb7a1"
+      },
+      "content": "Payment successful",
+      "exception": null,
+      "state_changed": true
+    },
+    {
+      "domain": "instore",
+      "name": "instore_cancel_order",
+      "arguments": {
+        "order_id": "OI97cabeb7a1"
+      },
+      "content": "Order OI97cabeb7a1 is cancelled.",
+      "exception": null,
+      "state_changed": true
+    },
+    {
+      "domain": "instore",
+      "name": "instore_book",
+      "arguments": {
+        "user_id": "fixture_user",
+        "shop_id": "I1",
+        "time": "2026-11-06 12:00:00",
+        "customer_count": 2
+      },
+      "content": "BookInfo(book_id=OI34d0895ce2,shop_id=I1, book_time=2026-11-06 12:00:00, customer_id=fixture_user, customer_count=2, book_price=10.0, status=unpaid",
+      "exception": null,
+      "state_changed": true
+    },
+    {
+      "domain": "instore",
+      "name": "get_instore_books",
+      "arguments": {
+        "user_id": "fixture_user"
+      },
+      "content": "BookInfo(book_id=OI34d0895ce2,shop_id=I1, book_time=2026-11-06 12:00:00, customer_id=fixture_user, customer_count=2, book_price=10.0, status=unpaid",
+      "exception": null,
+      "state_changed": false
+    },
+    {
+      "domain": "instore",
+      "name": "search_instore_book",
+      "arguments": {
+        "user_id": "fixture_user",
+        "book_id": "OI34d0895ce2"
+      },
+      "content": "BookInfo(book_id=OI34d0895ce2,shop_id=I1, book_time=2026-11-06 12:00:00, customer_id=fixture_user, customer_count=2, book_price=10.0, status=unpaid",
+      "exception": null,
+      "state_changed": false
+    },
+    {
+      "domain": "instore",
+      "name": "pay_instore_book",
+      "arguments": {
+        "book_id": "OI34d0895ce2"
+      },
+      "content": "Payment successful",
+      "exception": null,
+      "state_changed": true
+    },
+    {
+      "domain": "instore",
+      "name": "instore_cancel_book",
+      "arguments": {
+        "book_id": "OI34d0895ce2"
+      },
+      "content": "BookInfo OI34d0895ce2 is cancelled.",
+      "exception": null,
+      "state_changed": true
+    },
+    {
+      "domain": "instore",
+      "name": "instore_reservation",
+      "arguments": {
+        "user_id": "fixture_user",
+        "shop_id": "I1",
+        "time": "2026-11-06 12:00:00",
+        "customer_count": 2
+      },
+      "content": "ReservationInfo(reservation_id=OI958d0d5c38,shop_id=I1, reservation_time=2026-11-06 12:00:00, customer_id=fixture_user, customer_count=2, status=unconsumed",
+      "exception": null,
+      "state_changed": true
+    },
+    {
+      "domain": "instore",
+      "name": "get_instore_reservations",
+      "arguments": {
+        "user_id": "fixture_user"
+      },
+      "content": "ReservationInfo(reservation_id=OI958d0d5c38,shop_id=I1, reservation_time=2026-11-06 12:00:00, customer_id=fixture_user, customer_count=2, status=unconsumed",
+      "exception": null,
+      "state_changed": false
+    },
+    {
+      "domain": "instore",
+      "name": "search_instore_reservation",
+      "arguments": {
+        "user_id": "fixture_user",
+        "reservation_id": "OI958d0d5c38"
+      },
+      "content": "ReservationInfo(reservation_id=OI958d0d5c38,shop_id=I1, reservation_time=2026-11-06 12:00:00, customer_id=fixture_user, customer_count=2, status=unconsumed",
+      "exception": null,
+      "state_changed": false
+    },
+    {
+      "domain": "instore",
+      "name": "instore_modify_reservation",
+      "arguments": {
+        "reservation_id": "OI958d0d5c38",
+        "time": "2026-11-06 13:00:00",
+        "customer_count": 3
+      },
+      "content": "ReservationInfo(reservation_id=OI958d0d5c38,shop_id=I1, reservation_time=2026-11-06 13:00:00, customer_id=fixture_user, customer_count=3, status=unconsumed",
+      "exception": null,
+      "state_changed": true
+    },
+    {
+      "domain": "instore",
+      "name": "instore_cancel_reservation",
+      "arguments": {
+        "reservation_id": "OI958d0d5c38"
+      },
+      "content": "ReservationInfo OI958d0d5c38 is cancelled.",
+      "exception": null,
+      "state_changed": true
+    },
+    {
+      "domain": "ota",
+      "name": "hotel_search_recommand",
+      "arguments": {
+        "city_name": "北京",
+        "key_words": [
+          "安静"
+        ]
+      },
+      "content": "Hotel(hotel_id=H1, hotel_name=测试酒店, score=4.8, star_rating=4, location=address='北京测试路1号' longitude=116.4 latitude=39.9, tags=['安静'])",
+      "exception": null,
+      "state_changed": false
+    },
+    {
+      "domain": "ota",
+      "name": "attractions_search_recommend",
+      "arguments": {
+        "city_name": "北京",
+        "key_words": [
+          "公园"
+        ]
+      },
+      "content": "Attraction(attraction_id=A1, attraction_name=测试景区, location=address='北京测试路1号' longitude=116.4 latitude=39.9, description=公园, score=4.7, opening_hours=08:00-18:00, ",
+      "exception": null,
+      "state_changed": false
+    },
+    {
+      "domain": "ota",
+      "name": "flight_search_recommend",
+      "arguments": {
+        "departure": "北京",
+        "destination": "上海"
+      },
+      "content": "Flight(flight_id=F1, flight_number=CA123, departure_city=北京, arrival_city=上海, departure_airport_location=address='北京测试路1号' longitude=116.4 latitude=39.9, arrival_airport_location=address='上海测试路2号' longitude=121.5 latitude=31.2, departure_time=10:00:00, arrival_time=12:00:00, tags=['直达'])",
+      "exception": null,
+      "state_changed": false
+    },
+    {
+      "domain": "ota",
+      "name": "train_ticket_search",
+      "arguments": {
+        "departure": "北京",
+        "destination": "上海",
+        "date": "2026-11-06"
+      },
+      "content": "Train(train_id=T1, train_number=G123, departure_city=北京, arrival_city=上海, departure_station_location=address='北京测试路1号' longitude=116.4 latitude=39.9, arrival_station_location=address='上海测试路2号' longitude=121.5 latitude=31.2, departure_time=10:00:00, arrival_time=12:00:00, tags=['直达'])",
+      "exception": null,
+      "state_changed": false
+    },
+    {
+      "domain": "ota",
+      "name": "taxi_search",
+      "arguments": {
+        "departure_location": "北京测试路1号",
+        "arrival_location": "上海测试路2号"
+      },
+      "content": "Taxi(taxi_id=X1, taxi_type=快车, platform=测试平台, departure_location=address='北京测试路1号' longitude=116.4 latitude=39.9, arrival_location=address='上海测试路2号' longitude=121.5 latitude=31.2, estimated_duration=30分钟, estimated_price=50.0, tags=[])",
+      "exception": null,
+      "state_changed": false
+    },
+    {
+      "domain": "ota",
+      "name": "get_ota_hotel_info",
+      "arguments": {
+        "hotel_id": "H1"
+      },
+      "content": "Hotel Info:\nHotel(hotel_id=H1, hotel_name=测试酒店, score=4.8, star_rating=4, location=address='北京测试路1号' longitude=116.4 latitude=39.9, tags=['安静'], products=HotelProduct(room_type=大床, date=2026-11-06, price=100.0, quantity=10, room_id=HP0)\nHotelProduct(room_type=大床, date=2026-11-07, price=150.0, quantity=10, room_id=HP1))",
+      "exception": null,
+      "state_changed": false
+    },
+    {
+      "domain": "ota",
+      "name": "create_hotel_order",
+      "arguments": {
+        "hotel_id": "H1",
+        "room_id": "HP0",
+        "user_id": "fixture_user"
+      },
+      "content": "Order(order_id:OO7407e2b217, order_type:hotel, user_id:fixture_user, hotel_id:H1, total_price:100.0, create_time:2026-11-05 09:00:00, update_time:2026-11-05 09:00:00, status:unpaid, products:[HotelProduct(room_type=大床, date=2026-11-06, price=100.0, quantity=1, room_id=HP0)])",
+      "exception": null,
+      "state_changed": true
+    },
+    {
+      "domain": "ota",
+      "name": "search_hotel_order",
+      "arguments": {
+        "user_id": "fixture_user",
+        "status": "unpaid"
+      },
+      "content": "Order(order_id:OO7407e2b217, order_type:hotel, user_id:fixture_user, hotel_id:H1, total_price:100.0, create_time:2026-11-05 09:00:00, update_time:2026-11-05 09:00:00, status:unpaid, ",
+      "exception": null,
+      "state_changed": false
+    },
+    {
+      "domain": "ota",
+      "name": "get_hotel_order_detail",
+      "arguments": {
+        "order_id": "OO7407e2b217"
+      },
+      "content": "Order(order_id:OO7407e2b217, order_type:hotel, user_id:fixture_user, hotel_id:H1, total_price:100.0, create_time:2026-11-05 09:00:00, update_time:2026-11-05 09:00:00, status:unpaid, products:[HotelProduct(room_type=大床, date=2026-11-06, price=100.0, quantity=1, room_id=HP0)])",
+      "exception": null,
+      "state_changed": false
+    },
+    {
+      "domain": "ota",
+      "name": "pay_hotel_order",
+      "arguments": {
+        "order_id": "OO7407e2b217"
+      },
+      "content": "Payment successful",
+      "exception": null,
+      "state_changed": true
+    },
+    {
+      "domain": "ota",
+      "name": "cancel_hotel_order",
+      "arguments": {
+        "order_id": "OO7407e2b217",
+        "user_id": "fixture_user"
+      },
+      "content": "Cancellation successful, refund amount: 100.0",
+      "exception": null,
+      "state_changed": true
+    },
+    {
+      "domain": "ota",
+      "name": "get_ota_attraction_info",
+      "arguments": {
+        "attraction_id": "A1"
+      },
+      "content": "Attraction Info:\nAttraction(attraction_id=A1, attraction_name=测试景区, location=address='北京测试路1号' longitude=116.4 latitude=39.9, description=公园, score=4.7, opening_hours=08:00-18:00, ticket_price=100.0, products=AttractionProduct(ticket_type=成人, date=2026-11-06, price=100.0, quantity=10, attraction_id=AP0)\nAttractionProduct(ticket_type=成人, date=2026-11-07, price=150.0, quantity=10, attraction_id=AP1))",
+      "exception": null,
+      "state_changed": false
+    },
+    {
+      "domain": "ota",
+      "name": "create_attraction_order",
+      "arguments": {
+        "attraction_id": "A1",
+        "ticket_id": "AP0",
+        "user_id": "fixture_user",
+        "quantity": 1,
+        "date": "2026-11-06"
+      },
+      "content": "Order(order_id:OO96f0df6b4c, order_type:attraction, user_id:fixture_user, attraction_id:A1, total_price:100.0, create_time:2026-11-05 09:00:00, update_time:2026-11-05 09:00:00, status:unpaid, products:[AttractionProduct(ticket_type=成人, date=2026-11-06, price=100.0, quantity=1, attraction_id=AP0)])",
+      "exception": null,
+      "state_changed": true
+    },
+    {
+      "domain": "ota",
+      "name": "search_attraction_order",
+      "arguments": {
+        "user_id": "fixture_user",
+        "status": "unpaid"
+      },
+      "content": "Order(order_id:OO96f0df6b4c, order_type:attraction, user_id:fixture_user, attraction_id:A1, total_price:100.0, create_time:2026-11-05 09:00:00, update_time:2026-11-05 09:00:00, status:unpaid, ",
+      "exception": null,
+      "state_changed": false
+    },
+    {
+      "domain": "ota",
+      "name": "get_attraction_order_detail",
+      "arguments": {
+        "order_id": "OO96f0df6b4c"
+      },
+      "content": "Order(order_id:OO96f0df6b4c, order_type:attraction, user_id:fixture_user, attraction_id:A1, total_price:100.0, create_time:2026-11-05 09:00:00, update_time:2026-11-05 09:00:00, status:unpaid, products:[AttractionProduct(ticket_type=成人, date=2026-11-06, price=100.0, quantity=1, attraction_id=AP0)])",
+      "exception": null,
+      "state_changed": false
+    },
+    {
+      "domain": "ota",
+      "name": "pay_attraction_order",
+      "arguments": {
+        "order_id": "OO96f0df6b4c"
+      },
+      "content": "Payment successful",
+      "exception": null,
+      "state_changed": true
+    },
+    {
+      "domain": "ota",
+      "name": "cancel_attraction_order",
+      "arguments": {
+        "order_id": "OO96f0df6b4c",
+        "user_id": "fixture_user"
+      },
+      "content": "Cancellation successful, refund amount: 100.0",
+      "exception": null,
+      "state_changed": true
+    },
+    {
+      "domain": "ota",
+      "name": "get_ota_flight_info",
+      "arguments": {
+        "flight_id": "F1"
+      },
+      "content": "Flight Info:\nFlight(flight_id=F1, flight_number=CA123, departure_city=北京, arrival_city=上海, departure_airport_location=address='北京测试路1号' longitude=116.4 latitude=39.9, arrival_airport_location=address='上海测试路2号' longitude=121.5 latitude=31.2, departure_time=10:00:00, arrival_time=12:00:00, tags=['直达'], products=FlightProduct(seat_type=经济舱, date=2026-11-06, price=100.0, quantity=10, seat_id=FP0)\nFlightProduct(seat_type=经济舱, date=2026-11-07, price=150.0, quantity=10, seat_id=FP1))",
+      "exception": null,
+      "state_changed": false
+    },
+    {
+      "domain": "ota",
+      "name": "create_flight_order",
+      "arguments": {
+        "flight_id": "F1",
+        "seat_id": "FP0",
+        "user_id": "fixture_user",
+        "quantity": 1,
+        "date": "2026-11-06"
+      },
+      "content": "Order(order_id:OO424b91d1d2, order_type:flight, user_id:fixture_user, flight_id:F1, total_price:100.0, create_time:2026-11-05 09:00:00, update_time:2026-11-05 09:00:00, status:unpaid, products:[FlightProduct(seat_type=经济舱, date=2026-11-06, price=100.0, quantity=1, seat_id=FP0)])",
+      "exception": null,
+      "state_changed": true
+    },
+    {
+      "domain": "ota",
+      "name": "search_flight_order",
+      "arguments": {
+        "user_id": "fixture_user",
+        "status": "unpaid"
+      },
+      "content": "Order(order_id:OO424b91d1d2, order_type:flight, user_id:fixture_user, flight_id:F1, total_price:100.0, create_time:2026-11-05 09:00:00, update_time:2026-11-05 09:00:00, status:unpaid, ",
+      "exception": null,
+      "state_changed": false
+    },
+    {
+      "domain": "ota",
+      "name": "get_flight_order_detail",
+      "arguments": {
+        "order_id": "OO424b91d1d2"
+      },
+      "content": "Order(order_id:OO424b91d1d2, order_type:flight, user_id:fixture_user, flight_id:F1, total_price:100.0, create_time:2026-11-05 09:00:00, update_time:2026-11-05 09:00:00, status:unpaid, products:[FlightProduct(seat_type=经济舱, date=2026-11-06, price=100.0, quantity=1, seat_id=FP0)])",
+      "exception": null,
+      "state_changed": false
+    },
+    {
+      "domain": "ota",
+      "name": "pay_flight_order",
+      "arguments": {
+        "order_id": "OO424b91d1d2"
+      },
+      "content": "Payment successful",
+      "exception": null,
+      "state_changed": true
+    },
+    {
+      "domain": "ota",
+      "name": "modify_flight_order",
+      "arguments": {
+        "order_id": "OO424b91d1d2",
+        "user_id": "fixture_user",
+        "new_date": "2026-11-07"
+      },
+      "content": "Modification successful, need to pay additional amount: 50.0, please pay as soon as possible",
+      "exception": null,
+      "state_changed": true
+    },
+    {
+      "domain": "ota",
+      "name": "get_flight_order_detail",
+      "arguments": {
+        "order_id": "OO424b91d1d2"
+      },
+      "content": "Order(order_id:OO424b91d1d2, order_type:flight, user_id:fixture_user, flight_id:F1, total_price:150.0, create_time:2026-11-05 09:00:00, update_time:2026-11-05 09:00:00, status:unpaid, products:[FlightProduct(seat_type=经济舱, date=2026-11-07, price=150.0, quantity=1, seat_id=FP1)])",
+      "exception": null,
+      "state_changed": false
+    },
+    {
+      "domain": "ota",
+      "name": "pay_flight_order",
+      "arguments": {
+        "order_id": "OO424b91d1d2"
+      },
+      "content": "Payment successful",
+      "exception": null,
+      "state_changed": true
+    },
+    {
+      "domain": "ota",
+      "name": "cancel_flight_order",
+      "arguments": {
+        "order_id": "OO424b91d1d2",
+        "user_id": "fixture_user"
+      },
+      "content": "Cancellation successful, refund amount: 150.0",
+      "exception": null,
+      "state_changed": true
+    },
+    {
+      "domain": "ota",
+      "name": "get_ota_train_info",
+      "arguments": {
+        "train_id": "T1"
+      },
+      "content": "Train Info:\nTrain(train_id=T1, train_number=G123, departure_city=北京, arrival_city=上海, departure_station_location=address='北京测试路1号' longitude=116.4 latitude=39.9, arrival_station_location=address='上海测试路2号' longitude=121.5 latitude=31.2, departure_time=10:00:00, arrival_time=12:00:00, tags=['直达'], products=TrainProduct(seat_type=二等座, date=2026-11-06, price=100.0, quantity=10, seat_id=TP0)\nTrainProduct(seat_type=二等座, date=2026-11-07, price=150.0, quantity=10, seat_id=TP1))",
+      "exception": null,
+      "state_changed": false
+    },
+    {
+      "domain": "ota",
+      "name": "create_train_order",
+      "arguments": {
+        "train_id": "T1",
+        "seat_id": "TP0",
+        "user_id": "fixture_user",
+        "quantity": 1,
+        "date": "2026-11-06"
+      },
+      "content": "Order(order_id:OOaddfdae692, order_type:train, user_id:fixture_user, train_id:T1, total_price:100.0, create_time:2026-11-05 09:00:00, update_time:2026-11-05 09:00:00, status:unpaid, products:[TrainProduct(seat_type=二等座, date=2026-11-06, price=100.0, quantity=1, seat_id=TP0)])",
+      "exception": null,
+      "state_changed": true
+    },
+    {
+      "domain": "ota",
+      "name": "search_train_order",
+      "arguments": {
+        "user_id": "fixture_user",
+        "status": "unpaid"
+      },
+      "content": "Order(order_id:OOaddfdae692, order_type:train, user_id:fixture_user, train_id:T1, total_price:100.0, create_time:2026-11-05 09:00:00, update_time:2026-11-05 09:00:00, status:unpaid, ",
+      "exception": null,
+      "state_changed": false
+    },
+    {
+      "domain": "ota",
+      "name": "get_train_order_detail",
+      "arguments": {
+        "order_id": "OOaddfdae692"
+      },
+      "content": "Order(order_id:OOaddfdae692, order_type:train, user_id:fixture_user, train_id:T1, total_price:100.0, create_time:2026-11-05 09:00:00, update_time:2026-11-05 09:00:00, status:unpaid, products:[TrainProduct(seat_type=二等座, date=2026-11-06, price=100.0, quantity=1, seat_id=TP0)])",
+      "exception": null,
+      "state_changed": false
+    },
+    {
+      "domain": "ota",
+      "name": "pay_train_order",
+      "arguments": {
+        "order_id": "OOaddfdae692"
+      },
+      "content": "Payment successful",
+      "exception": null,
+      "state_changed": true
+    },
+    {
+      "domain": "ota",
+      "name": "modify_train_order",
+      "arguments": {
+        "order_id": "OOaddfdae692",
+        "user_id": "fixture_user",
+        "new_date": "2026-11-07"
+      },
+      "content": "Modification successful, need to pay additional amount: 50.0, please pay as soon as possible",
+      "exception": null,
+      "state_changed": true
+    },
+    {
+      "domain": "ota",
+      "name": "get_train_order_detail",
+      "arguments": {
+        "order_id": "OOaddfdae692"
+      },
+      "content": "Order(order_id:OOaddfdae692, order_type:train, user_id:fixture_user, train_id:T1, total_price:150.0, create_time:2026-11-05 09:00:00, update_time:2026-11-05 09:00:00, status:unpaid, products:[TrainProduct(seat_type=二等座, date=2026-11-07, price=150.0, quantity=1, seat_id=TP1)])",
+      "exception": null,
+      "state_changed": false
+    },
+    {
+      "domain": "ota",
+      "name": "pay_train_order",
+      "arguments": {
+        "order_id": "OOaddfdae692"
+      },
+      "content": "Payment successful",
+      "exception": null,
+      "state_changed": true
+    },
+    {
+      "domain": "ota",
+      "name": "cancel_train_order",
+      "arguments": {
+        "order_id": "OOaddfdae692",
+        "user_id": "fixture_user"
+      },
+      "content": "Cancellation successful, refund amount: 150.0",
+      "exception": null,
+      "state_changed": true
+    },
+    {
+      "domain": "ota",
+      "name": "get_taxi_info",
+      "arguments": {
+        "taxi_id": "X1"
+      },
+      "content": "Taxi Info:\nTaxi(taxi_id=X1, taxi_type=快车, platform=测试平台, departure_location=address='北京测试路1号' longitude=116.4 latitude=39.9, arrival_location=address='上海测试路2号' longitude=121.5 latitude=31.2, estimated_duration=30分钟, estimated_price=50.0, tags=[], products=TaxiProduct(taxi_type=快车, platform=测试平台, price=50.0, quantity=10, product_id=XP1))",
+      "exception": null,
+      "state_changed": false
+    },
+    {
+      "domain": "ota",
+      "name": "create_taxi_order",
+      "arguments": {
+        "taxi_id": "X1",
+        "product_id": "XP1",
+        "user_id": "fixture_user",
+        "quantity": 1
+      },
+      "content": "Error: Unsupported scenario type: taxi",
+      "exception": "ValueError",
+      "state_changed": true
+    },
+    {
+      "domain": "ota",
+      "name": "search_taxi_order",
+      "arguments": {
+        "user_id": "fixture_user",
+        "status": "unpaid"
+      },
+      "content": "",
+      "exception": null,
+      "state_changed": false
+    },
+    {
+      "domain": "ota",
+      "name": "get_taxi_order_detail",
+      "arguments": {
+        "order_id": "MISSING"
+      },
+      "content": "Error: Order MISSING not found",
+      "exception": "ValueError",
+      "state_changed": false
+    },
+    {
+      "domain": "ota",
+      "name": "pay_taxi_order",
+      "arguments": {
+        "order_id": "MISSING"
+      },
+      "content": "Error: Order MISSING not found",
+      "exception": "ValueError",
+      "state_changed": false
+    },
+    {
+      "domain": "ota",
+      "name": "cancel_taxi_order",
+      "arguments": {
+        "order_id": "MISSING",
+        "user_id": "fixture_user"
+      },
+      "content": "Error: Order MISSING not found",
+      "exception": "ValueError",
+      "state_changed": false
+    }
+  ],
+  "tools_exercised": 72,
+  "exceptions": [
+    {
+      "name": "create_taxi_order",
+      "content": "Error: Unsupported scenario type: taxi",
+      "state_changed": true
+    },
+    {
+      "name": "get_taxi_order_detail",
+      "content": "Error: Order MISSING not found",
+      "state_changed": false
+    },
+    {
+      "name": "pay_taxi_order",
+      "content": "Error: Order MISSING not found",
+      "state_changed": false
+    },
+    {
+      "name": "cancel_taxi_order",
+      "content": "Error: Order MISSING not found",
+      "state_changed": false
+    }
+  ]
+}

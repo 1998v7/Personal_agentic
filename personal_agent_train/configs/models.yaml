@@ -1,0 +1,17 @@
+# 训练时的辅助角色:用户模拟器(user)与裁判(judge),走 OpenRouter。
+# 被训练的策略模型不在这里:它是本地 rollout 服务,地址由 uni-agent 在运行时填入(见 pat_train/policy.py)。
+# action 只是满足 models.yaml 的格式要求,训练时不会用到。
+env_file: ../../Personal_agentic/.env
+roles:
+  action: openrouter-deepseek-v4.1-flash
+  user: openrouter-deepseek-v4.1-flash
+  judge: openrouter-deepseek-v4.1-flash
+
+models:
+  openrouter-deepseek-v4.1-flash:
+    provider: openrouter
+    model: deepseek/deepseek-v4.1-flash-1017
+    api_key_env: OPENROUTER_API_KEY
+    timeout_s: 300
+    params: {max_tokens: 12000, temperature: 0.0}
+    options: {app_title: IMAct-train}

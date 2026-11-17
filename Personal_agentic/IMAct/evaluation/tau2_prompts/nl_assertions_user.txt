@@ -1,0 +1,7 @@
+
+        conversation:
+        {trajectory_str}
+        
+        expectedOutcomes:
+        {nl_assertions}
+        

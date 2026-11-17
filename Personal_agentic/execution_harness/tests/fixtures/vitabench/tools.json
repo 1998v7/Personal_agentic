@@ -1,0 +1,1955 @@
+[
+  {
+    "type": "function",
+    "function": {
+      "name": "delivery_distance_to_time",
+      "description": "根据距离（米）计算外卖配送时间（分钟）\n\nPreconditions:\n    - 根据从商家到用户地址的距离计算外卖配送时间\nPostconditions:\n    - 返回配送时间（分钟）",
+      "parameters": {
+        "properties": {
+          "distance": {
+            "description": "距离（以米为单位）",
+            "title": "Distance",
+            "type": "number"
+          }
+        },
+        "required": [
+          "distance"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_delivery_store_info",
+      "description": "获取商家信息，包括商家id、评分、地址、经度、纬度、标签、商品列表\n\nPreconditions:\n    - 处于外卖场景，需要获取商家的详细信息\nPostconditions:\n    - 返回商家的详细信息",
+      "parameters": {
+        "properties": {
+          "store_id": {
+            "description": "商家id",
+            "title": "Store Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "store_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_delivery_product_info",
+      "description": "获取商品信息，包括商品名称、商品id、商店名称、商店id、商品评分、商品价格、商品标签\n\nPreconditions:\n    - 处于外卖场景，需要获取商品的详细信息\nPostconditions:\n    - 返回商品的详细信息",
+      "parameters": {
+        "properties": {
+          "product_id": {
+            "title": "Product Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "product_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "delivery_store_search_recommand",
+      "description": "在外卖场景下，可以根据用户表达抽取出描述商家的关键词，搜索或推荐多个商家\n\nPreconditions:\n    - 处于外卖场景，获取描述商家的关键词\nPostconditions:\n    - 返回商家列表，引导用户选择确定商家",
+      "parameters": {
+        "properties": {
+          "keywords": {
+            "description": "描述商家的关键词",
+            "items": {
+              "type": "string"
+            },
+            "title": "Keywords",
+            "type": "array"
+          }
+        },
+        "required": [
+          "keywords"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "delivery_product_search_recommand",
+      "description": "在外卖场景下，可以根据用户表达抽取出描述商品的关键词，搜索或推荐多个商品\n\nPreconditions:\n    - 处于外卖场景，获取描述商品的关键词\nPostconditions:\n    - 返回商品列表，引导用户选择商品并创建订单",
+      "parameters": {
+        "properties": {
+          "keywords": {
+            "description": "描述商品的关键词",
+            "items": {
+              "type": "string"
+            },
+            "title": "Keywords",
+            "type": "array"
+          }
+        },
+        "required": [
+          "keywords"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "create_delivery_order",
+      "description": "外卖订单创建，仅支持单个商家下单，单个商家可以下单多个商品\n\nPreconditions:\n    - 处于外卖场景，确定唯一一个店家id和一个或多个商品id，确定用户的饮食禁忌，并在订单中体现\nPostconditions:\n    - 返回订单信息，询问用户是否支付订单",
+      "parameters": {
+        "properties": {
+          "user_id": {
+            "description": "用户id",
+            "title": "User Id",
+            "type": "string"
+          },
+          "store_id": {
+            "description": "商店id",
+            "title": "Store Id",
+            "type": "string"
+          },
+          "product_ids": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Product Ids",
+            "type": "array"
+          },
+          "product_cnts": {
+            "items": {
+              "type": "integer"
+            },
+            "title": "Product Cnts",
+            "type": "array"
+          },
+          "address": {
+            "description": "外卖配送目标地址",
+            "title": "Address",
+            "type": "string"
+          },
+          "dispatch_time": {
+            "description": "外卖订单开始配送的时间（即骑手从商家取餐出发的时间），格式为yyyy-mm-dd HH:MM:SS",
+            "title": "Dispatch Time",
+            "type": "string"
+          },
+          "attributes": {
+            "default": null,
+            "description": "商品id对应商品规格属性",
+            "title": "Attributes",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "note": {
+            "default": "",
+            "description": "订单备注（禁止将用户关于时间等需求直接放在备注中），如饮食禁忌信息说明",
+            "title": "Note",
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id",
+          "store_id",
+          "product_ids",
+          "product_cnts",
+          "address",
+          "dispatch_time"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "pay_delivery_order",
+      "description": "在外卖场景下，上文有订单信息，用户表达确认支付，或者重新支付\n\nPreconditions:\n    - 处于外卖场景，用户表达确认支付，订单创建完成并进入支付环节｜用户表示重新支付\nPostconditions:\n    - 返回支付结果信息",
+      "parameters": {
+        "properties": {
+          "order_id": {
+            "description": "订单id",
+            "title": "Order Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "order_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_delivery_order_status",
+      "description": "获取订单状态\n\nPreconditions:\n    - 查询外卖订单状态\nPostconditions:\n    - 返回订单状态信息",
+      "parameters": {
+        "properties": {
+          "order_id": {
+            "description": "订单id",
+            "title": "Order Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "order_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "cancel_delivery_order",
+      "description": "用户取消订单，或者用户取消支付。禁止对处于已取消状态的订单再次取消。\n\nPreconditions:\n    - 查询外卖订单状态，确保订单状态为非cancelled\nPostconditions:\n    - 返回取消订单结果信息",
+      "parameters": {
+        "properties": {
+          "order_id": {
+            "description": "订单id",
+            "title": "Order Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "order_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "modify_delivery_order",
+      "description": "修改订单备注信息\n\nPreconditions:\n    - 上文确定唯一一个外卖order_id，用户需要修改外卖订单备注\nPostconditions:\n    - 输出修改后订单信息，如果订单还未支付则需要用户确认支付",
+      "parameters": {
+        "properties": {
+          "order_id": {
+            "description": "订单id",
+            "title": "Order Id",
+            "type": "string"
+          },
+          "note": {
+            "description": "新的订单备注信息",
+            "title": "Note",
+            "type": "string"
+          }
+        },
+        "required": [
+          "order_id",
+          "note"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "search_delivery_orders",
+      "description": "查询所有外卖订单，返回包含订单ID、订单类型、用户ID、商家ID、总价、下单时间、更新时间、订单状态等信息\n\nPreconditions:\n    - 按照查询条件查看所有外卖订单\nPostconditions:\n    - 返回所有符合条件外卖订单的详细信息",
+      "parameters": {
+        "properties": {
+          "user_id": {
+            "description": "用户ID",
+            "title": "User Id",
+            "type": "string"
+          },
+          "status": {
+            "default": "unpaid",
+            "description": "订单状态，默认为未支付",
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_delivery_order_detail",
+      "description": "根据订单ID查询外卖订单，返回包含订单ID、订单类型、商家ID、配送时间、配送耗时、送达时间、总价、下单时间、更新时间、订单状态和商品列表等详细信息\n\nPreconditions:\n    - 上文确定唯一一个外卖order_id\nPostconditions:\n    - 返回指定订单详细信息",
+      "parameters": {
+        "properties": {
+          "order_id": {
+            "description": "订单id",
+            "title": "Order Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "order_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "longitude_latitude_to_distance",
+      "description": "根据经纬度计算两点之间的距离（以米为单位）\n\nPreconditions:\n    - 根据两个点的经纬度计算它们之间的距离\nPostconditions:\n    - 返回两点之间的距离（整数，以米为单位）",
+      "parameters": {
+        "properties": {
+          "longitude1": {
+            "description": "第一个点的经度",
+            "title": "Longitude1",
+            "type": "number"
+          },
+          "latitude1": {
+            "description": "第一个点的纬度",
+            "title": "Latitude1",
+            "type": "number"
+          },
+          "longitude2": {
+            "description": "第二个点的经度",
+            "title": "Longitude2",
+            "type": "number"
+          },
+          "latitude2": {
+            "description": "第二个点的纬度",
+            "title": "Latitude2",
+            "type": "number"
+          }
+        },
+        "required": [
+          "longitude1",
+          "latitude1",
+          "longitude2",
+          "latitude2"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "weather",
+      "description": "查询指定地址在date_start到date_end期间的天气信息\n\nPreconditions:\n    - 查询指定地址在指定日期范围内的天气信息\nPostconditions:\n    - 返回天气信息",
+      "parameters": {
+        "properties": {
+          "address": {
+            "description": "要查询的地址",
+            "title": "Address",
+            "type": "string"
+          },
+          "date_start": {
+            "description": "开始时间，格式为 yyyy-mm-dd",
+            "title": "Date Start",
+            "type": "string"
+          },
+          "date_end": {
+            "description": "结束时间，格式为 yyyy-mm-dd",
+            "title": "Date End",
+            "type": "string"
+          }
+        },
+        "required": [
+          "address",
+          "date_start",
+          "date_end"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "address_to_longitude_latitude",
+      "description": "根据地址获取经纬度\n\nPreconditions:\n    - 根据地址获取对应的经纬度坐标\nPostconditions:\n    - 返回经纬度坐标",
+      "parameters": {
+        "properties": {
+          "address": {
+            "description": "要查询的地址",
+            "title": "Address",
+            "type": "string"
+          }
+        },
+        "required": [
+          "address"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_date_holiday_info",
+      "description": "判断某日期是否为中国节假日；如果是则返回节假日中文名称\n\nPreconditions:\n    - 根据日期判断是否为节假日，如果是则返回节假日名称\nPostconditions:\n    - 返回节假日信息",
+      "parameters": {
+        "properties": {
+          "date": {
+            "description": "日期，格式为 yyyy-mm-dd",
+            "title": "Date",
+            "type": "string"
+          }
+        },
+        "required": [
+          "date"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_holiday_date",
+      "description": "获取指定年份中某个节假日对应的具体日期\n\nPreconditions:\n    - 获取指定年份中某个节假日的具体日期\nPostconditions:\n    - 返回节假日的日期",
+      "parameters": {
+        "properties": {
+          "year": {
+            "description": "年份",
+            "title": "Year",
+            "type": "string"
+          },
+          "holiday_name": {
+            "description": "节假日名称，仅支持中文表述",
+            "title": "Holiday Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "year",
+          "holiday_name"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_user_all_orders",
+      "description": "获取用户所有订单信息\n\nPreconditions:\n    - 获取用户的所有订单信息\nPostconditions:\n    - 返回用户所有订单信息\n\nArgs:\n\nReturns:\n    用户所有订单信息摘要",
+      "parameters": {
+        "properties": {},
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_nearby",
+      "description": "获取附近所有商店/商业场所的信息\n\nPreconditions:\n    - 获取指定范围内（米）的所有商业场所（商店、机场或火车站、酒店、景点、商铺等）的信息\nPostconditions:\n    - 返回商业场所信息",
+      "parameters": {
+        "properties": {
+          "longitude": {
+            "description": "经度",
+            "title": "Longitude",
+            "type": "number"
+          },
+          "latitude": {
+            "description": "纬度",
+            "title": "Latitude",
+            "type": "number"
+          },
+          "range": {
+            "description": "范围（以米为单位）",
+            "title": "Range",
+            "type": "number"
+          }
+        },
+        "required": [
+          "longitude",
+          "latitude",
+          "range"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "instore_shop_search_recommend",
+      "description": "在到店场景下，用户（需求模糊，没明确表达具体套餐｜没有明确表达具体商家），需要结合用户个人喜好和商家标签等信息，推荐多个商家\n\nPreconditions:\n    - 处于到店场景，获取商家相关的关键词\nPostconditions:\n    - 返回商家列表，引导用户选择确定商家，商家确定后需要用户选择并确定套餐",
+      "parameters": {
+        "properties": {
+          "keywords": {
+            "description": "描述商家的关键词",
+            "items": {
+              "type": "string"
+            },
+            "title": "Keywords",
+            "type": "array"
+          }
+        },
+        "required": [
+          "keywords"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "instore_product_search_recommend",
+      "description": "在到店场景下，可以根据用户表达抽取出描述套餐的关键词，搜索或推荐多个套餐\n\nPreconditions:\n    - 处于到店场景，套餐相关的关键词\nPostconditions:\n    - 返回套餐列表，引导用户选择套餐并创建订单",
+      "parameters": {
+        "properties": {
+          "keywords": {
+            "description": "描述套餐的关键词",
+            "items": {
+              "type": "string"
+            },
+            "title": "Keywords",
+            "type": "array"
+          }
+        },
+        "required": [
+          "keywords"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "create_instore_product_order",
+      "description": "到店订单提交\n\nPreconditions:\n    - 处于到店场景，确定唯一一个店家id和一个或多个商品id\nPostconditions:\n    - 返回订单信息（包含order_id），询问用户是否支付订单",
+      "parameters": {
+        "properties": {
+          "user_id": {
+            "description": "用户id",
+            "title": "User Id",
+            "type": "string"
+          },
+          "shop_id": {
+            "description": "商家id",
+            "title": "Shop Id",
+            "type": "string"
+          },
+          "product_id": {
+            "description": "套餐id",
+            "title": "Product Id",
+            "type": "string"
+          },
+          "quantity": {
+            "default": 1,
+            "description": "数量",
+            "title": "Quantity",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "user_id",
+          "shop_id",
+          "product_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "pay_instore_order",
+      "description": "在到店场景下，上文有订单信息，用户表达支付完成，或者重新支付完成\n\nPreconditions:\n    - 处于到店场景，用户表达完成支付操作，订单创建完成并进入支付环节｜用户表示重新支付\nPostconditions:\n    - 返回支付结果信息",
+      "parameters": {
+        "properties": {
+          "order_id": {
+            "description": "订单id",
+            "title": "Order Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "order_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "instore_cancel_order",
+      "description": "用户取消订单，或者用户取消支付。禁止对处于已取消状态的订单再次取消。\n\nPreconditions:\n    - 处于到店场景，查询订单状态，确保订单状态为非cancelled\nPostconditions:\n    - 返回取消订单结果信息",
+      "parameters": {
+        "properties": {
+          "order_id": {
+            "description": "订单id",
+            "title": "Order Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "order_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "instore_book",
+      "description": "座位预定 - 在选定商家后预定物理座位/桌位\n\nPreconditions:\n    - 处于到店场景，确定唯一一个商家id，商家支持座位预定服务\nPostconditions:\n    - 返回座位预定信息（包含book_id），如需要支付订座费，询问用户是否支付",
+      "parameters": {
+        "properties": {
+          "user_id": {
+            "description": "用户id",
+            "title": "User Id",
+            "type": "string"
+          },
+          "shop_id": {
+            "description": "商家id",
+            "title": "Shop Id",
+            "type": "string"
+          },
+          "time": {
+            "description": "座位预定时间 格式: %Y-%m-%d %H:%M:%S",
+            "title": "Time",
+            "type": "string"
+          },
+          "customer_count": {
+            "default": 1,
+            "description": "座位预定人数，默认为1人",
+            "title": "Customer Count",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "user_id",
+          "shop_id",
+          "time"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "pay_instore_book",
+      "description": "到店座位预定支付\n\nPreconditions:\n    - 处于到店场景，确定唯一一个订座id\nPostconditions:\n    - 返回支付结果信息",
+      "parameters": {
+        "properties": {
+          "book_id": {
+            "description": "订座id",
+            "title": "Book Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "book_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "instore_cancel_book",
+      "description": "到店取消订座\n\nPreconditions:\n    - 处于到店场景，确定唯一一个订座id\nPostconditions:\n    - 返回取消订座结果信息",
+      "parameters": {
+        "properties": {
+          "book_id": {
+            "description": "订座id",
+            "title": "Book Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "book_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "instore_reservation",
+      "description": "服务预约 - 在选定商家后预约服务时间点\n\nPreconditions:\n    - 处于到店场景，确定唯一一个商家id，商家支持服务预约\nPostconditions:\n    - 返回服务预约信息（包含reservation_id），通知用户按照约定时间到商家接受服务",
+      "parameters": {
+        "properties": {
+          "user_id": {
+            "description": "用户id",
+            "title": "User Id",
+            "type": "string"
+          },
+          "shop_id": {
+            "description": "商家id",
+            "title": "Shop Id",
+            "type": "string"
+          },
+          "time": {
+            "description": "服务预约时间 格式: %Y-%m-%d %H:%M:%S",
+            "title": "Time",
+            "type": "string"
+          },
+          "customer_count": {
+            "default": 1,
+            "description": "服务预约人数，默认为1人",
+            "title": "Customer Count",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "user_id",
+          "shop_id",
+          "time"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "instore_modify_reservation",
+      "description": "到店场景对查询到的预约消费信息进行修改\n\nPreconditions:\n    - 处于到店场景，查询用户待修改预约消费订单，确定唯一一个reservation_id，用户修改预约消费的时间、人数\nPostconditions:\n    - 输出修改后预约消费信息，通知用户按照约定时间到商家消费",
+      "parameters": {
+        "properties": {
+          "reservation_id": {
+            "description": "预约消费id",
+            "title": "Reservation Id",
+            "type": "string"
+          },
+          "time": {
+            "description": "修改后的预约消费时间 正确格式为 %Y-%m-%d %H:%M:%S",
+            "title": "Time",
+            "type": "string"
+          },
+          "customer_count": {
+            "default": 0,
+            "description": "修改后的预约消费人数",
+            "title": "Customer Count",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "reservation_id",
+          "time"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "instore_cancel_reservation",
+      "description": "到店预约消费取消\n\nPreconditions:\n    - 处于到店场景，确定唯一一个预约消费id\nPostconditions:\n    - 返回取消预约消费结果信息",
+      "parameters": {
+        "properties": {
+          "reservation_id": {
+            "description": "预约消费id",
+            "title": "Reservation Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "reservation_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_instore_orders",
+      "description": "获取指定用户所有到店订单\n\nPreconditions:\n    - 处于到店场景，需要查看所有到店订单\nPostconditions:\n    - 返回所有到店订单的详细信息",
+      "parameters": {
+        "properties": {
+          "user_id": {
+            "description": "用户id",
+            "title": "User Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_instore_reservations",
+      "description": "获取指定用户所有到店预约消费\n\nPreconditions:\n    - 处于到店场景，需要查看所有到店预约消费\nPostconditions:\n    - 返回所有到店预约消费的详细信息",
+      "parameters": {
+        "properties": {
+          "user_id": {
+            "description": "用户id",
+            "title": "User Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_instore_books",
+      "description": "获取指定用户所有到店座位预定\n\nPreconditions:\n    - 处于到店场景，需要查看所有到店座位预定\nPostconditions:\n    - 返回所有到店座位预定的详细信息",
+      "parameters": {
+        "properties": {
+          "user_id": {
+            "description": "用户id",
+            "title": "User Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "search_instore_book",
+      "description": "查询用户的座位预定信息，当book_id为None时，返回用户所有座位预定，当book_id不为None时，返回指定座位预定\n\nPreconditions:\n    - 处于到店场景，当book_id为None时，返回用户所有座位预定，当book_id不为None时，返回指定座位预定\nPostconditions:\n    - 返回座位预定信息，方便之后进行修改/取消",
+      "parameters": {
+        "properties": {
+          "user_id": {
+            "description": "用户id",
+            "title": "User Id",
+            "type": "string"
+          },
+          "book_id": {
+            "default": null,
+            "description": "座位预定id，可选参数，默认为None",
+            "title": "Book Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "search_instore_reservation",
+      "description": "查询用户的预约消费信息\n\nPreconditions:\n    - 处于到店场景，当reservation_id为None时，返回用户所有预约消费，当reservation_id不为None时，返回指定预约消费\nPostconditions:\n    - 返回预约消费信息，方便之后进行修改/取消",
+      "parameters": {
+        "properties": {
+          "user_id": {
+            "description": "用户id",
+            "title": "User Id",
+            "type": "string"
+          },
+          "reservation_id": {
+            "default": null,
+            "description": "预约消费id，可选参数，默认为None",
+            "title": "Reservation Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_ota_hotel_info",
+      "description": "获取酒店信息，包含酒店id、名称、评分、星级、地址、标签、房间列表\n\nPreconditions:\n    - 在酒店查询预订场景，需要获取酒店的详细信息\nPostconditions:\n    - 返回酒店的详细信息，引导用户选择房间并下单",
+      "parameters": {
+        "properties": {
+          "hotel_id": {
+            "description": "酒店id",
+            "title": "Hotel Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "hotel_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_ota_attraction_info",
+      "description": "获取景点信息，包含景点id、名称、地址、描述、评分、开放时间、门票价格、票种列表\n\nPreconditions:\n    - 在景点旅游场景，需要获取景点的详细信息\nPostconditions:\n    - 返回景点的详细信息，引导用户选择门票并下单",
+      "parameters": {
+        "properties": {
+          "attraction_id": {
+            "description": "景点id",
+            "title": "Attraction Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "attraction_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_ota_flight_info",
+      "description": "获取航班信息，包含航班id、航班号、出发城市、到达城市、出发机场位置、到达机场位置、出发时间、到达时间、航班标签、座位类型列表\n\nPreconditions:\n    - 在机票查询购买场景，需要获取航班的详细信息\nPostconditions:\n    - 返回航班的详细信息，引导用户选择座位并下单",
+      "parameters": {
+        "properties": {
+          "flight_id": {
+            "description": "航班id",
+            "title": "Flight Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "flight_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_ota_train_info",
+      "description": "获取火车信息，包含火车id、车次、出发城市、到达城市、出发车站位置、到达车站位置、出发时间、到达时间、火车标签、座位类型列表\n\nPreconditions:\n    - 在火车票查询购买场景，需要获取火车的详细信息\nPostconditions:\n    - 返回火车的详细信息，引导用户选择座位并下单",
+      "parameters": {
+        "properties": {
+          "train_id": {
+            "description": "火车id",
+            "title": "Train Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "train_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "hotel_search_recommand",
+      "description": "酒旅场景下，基于用户的地点需求和偏好，推荐合适的酒店选项，提供酒店的基础信息，包含酒店id、名称、评分、星级、地址、标签\n\nPreconditions:\n    - 用户请求预定酒店，给出了酒店相关的关键词或地点\nPostconditions:\n    - 返回符合条件的酒店列表，如需查看酒店详情（房间列表、价格等）需要使用酒店详情查询工具，引导用户选择酒店",
+      "parameters": {
+        "properties": {
+          "city_name": {
+            "description": "城市名称",
+            "title": "City Name",
+            "type": "string"
+          },
+          "key_words": {
+            "default": null,
+            "description": "搜索关键词(匹配酒店名称、酒店介绍等)",
+            "title": "Key Words",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "city_name"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "attractions_search_recommend",
+      "description": "基于用户的地点需求和偏好，推荐合适的景点选项，提供景点的基础信息，包含景点id、名称、地址、描述、评分、开放时间\n\nPreconditions:\n    - 用户请求预定景点，给出了景点相关的关键词或地点\nPostconditions:\n    - 返回符合条件的景点列表，如需查看景点详情（门票列表、价格等）需要使用景点详情查询工具，引导用户选择景点",
+      "parameters": {
+        "properties": {
+          "city_name": {
+            "description": "城市名称",
+            "title": "City Name",
+            "type": "string"
+          },
+          "key_words": {
+            "description": "搜索关键词(匹配景点名称、位置、地址、特色等)",
+            "items": {
+              "type": "string"
+            },
+            "title": "Key Words",
+            "type": "array"
+          }
+        },
+        "required": [
+          "city_name",
+          "key_words"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "flight_search_recommend",
+      "description": "基于用户的地点需求和偏好，推荐合适的航班选项，提供航班的基础信息，包含航班id、航班号、出发城市、到达城市、出发机场位置、到达机场位置、出发时间、到达时间、航班标签\n\nPreconditions:\n    - 用户请求预定航班，给出了航班相关的关键词或地点\nPostconditions:\n    - 返回符合条件的航班列表，如需查看航班详情（座位类型列表、价格、日期等）需要使用航班详情查询工具，引导用户选择航班",
+      "parameters": {
+        "properties": {
+          "departure": {
+            "description": "出发城市",
+            "title": "Departure",
+            "type": "string"
+          },
+          "destination": {
+            "description": "目的城市",
+            "title": "Destination",
+            "type": "string"
+          }
+        },
+        "required": [
+          "departure",
+          "destination"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "train_ticket_search",
+      "description": "基于用户的地点需求和偏好，推荐合适的火车选项，提供火车票的基础信息，包含火车id、车次、出发城市、到达城市、出发车站位置、到达车站位置、出发时间、到达时间、火车标签\n\nPreconditions:\n    - 用户请求预定火车，给出了火车相关的关键词或地点\nPostconditions:\n    - 返回符合条件的火车票列表，如需查看火车票详情（座位类型列表、价格、日期等）需要使用火车票详情查询工具，引导用户选择火车票",
+      "parameters": {
+        "properties": {
+          "departure": {
+            "description": "出发城市",
+            "title": "Departure",
+            "type": "string"
+          },
+          "destination": {
+            "description": "目的城市",
+            "title": "Destination",
+            "type": "string"
+          },
+          "date": {
+            "description": "出发日期",
+            "title": "Date",
+            "type": "string"
+          }
+        },
+        "required": [
+          "departure",
+          "destination",
+          "date"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "create_hotel_order",
+      "description": "用户预订酒店时，系统根据用户的需求（如酒店名称、入住日期、人数等）生成订单\n\nPreconditions:\n    - 用户已登录并提供有效的身份标识（user_id），用户提供了有效的酒店名称（hotel_name）和房间类型（room_type），系统有关于目标酒店的信息，并且该酒店在所请求的日期内有房间\nPostconditions:\n    - 生成订单，请用户确认支付",
+      "parameters": {
+        "properties": {
+          "hotel_id": {
+            "description": "酒店ID",
+            "title": "Hotel Id",
+            "type": "string"
+          },
+          "room_id": {
+            "description": "房间ID",
+            "title": "Room Id",
+            "type": "string"
+          },
+          "user_id": {
+            "description": "用户ID",
+            "title": "User Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "hotel_id",
+          "room_id",
+          "user_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "create_attraction_order",
+      "description": "用户根据景点和日期购买门票，系统返回门票的相关信息并进行下单\n\nPreconditions:\n    - 在景点旅游场景，用户请求预定景点，给出了预定相关必要信息\nPostconditions:\n    - 生成订单，请用户确认支付",
+      "parameters": {
+        "properties": {
+          "attraction_id": {
+            "description": "景点ID",
+            "title": "Attraction Id",
+            "type": "string"
+          },
+          "ticket_id": {
+            "description": "门票ID",
+            "title": "Ticket Id",
+            "type": "string"
+          },
+          "user_id": {
+            "description": "用户ID",
+            "title": "User Id",
+            "type": "string"
+          },
+          "date": {
+            "description": "参观日期，格式为 %Y-%m-%d",
+            "title": "Date",
+            "type": "string"
+          },
+          "quantity": {
+            "description": "数量",
+            "title": "Quantity",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "attraction_id",
+          "ticket_id",
+          "user_id",
+          "date",
+          "quantity"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "create_flight_order",
+      "description": "用户根据航班号、日期、座位类型、数量购买机票，系统返回机票的相关信息并进行下单\n\nPreconditions:\n    - 在机票查询购买场景，用户请求预定航班，给出了预定相关必要信息\nPostconditions:\n    - 生成订单，请用户确认支付",
+      "parameters": {
+        "properties": {
+          "flight_id": {
+            "description": "航班ID",
+            "title": "Flight Id",
+            "type": "string"
+          },
+          "seat_id": {
+            "description": "座位ID",
+            "title": "Seat Id",
+            "type": "string"
+          },
+          "user_id": {
+            "description": "用户ID",
+            "title": "User Id",
+            "type": "string"
+          },
+          "date": {
+            "description": "出发日期",
+            "title": "Date",
+            "type": "string"
+          },
+          "quantity": {
+            "description": "数量",
+            "title": "Quantity",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "flight_id",
+          "seat_id",
+          "user_id",
+          "date",
+          "quantity"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "create_train_order",
+      "description": "用户根据车次、日期、座位类型、数量购买火车票，系统返回火车票的相关信息并进行下单\n\nPreconditions:\n    - 在火车票查询购买场景，用户请求预定火车，给出了预定相关必要信息\nPostconditions:\n    - 生成订单，请用户确认支付",
+      "parameters": {
+        "properties": {
+          "train_id": {
+            "description": "火车ID",
+            "title": "Train Id",
+            "type": "string"
+          },
+          "seat_id": {
+            "description": "座位ID",
+            "title": "Seat Id",
+            "type": "string"
+          },
+          "user_id": {
+            "description": "用户ID",
+            "title": "User Id",
+            "type": "string"
+          },
+          "date": {
+            "description": "出发日期",
+            "title": "Date",
+            "type": "string"
+          },
+          "quantity": {
+            "description": "数量",
+            "title": "Quantity",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "train_id",
+          "seat_id",
+          "user_id",
+          "date",
+          "quantity"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "pay_hotel_order",
+      "description": "用户进行酒店订单支付\n\nPreconditions:\n    - 在酒店查询预订场景，用户请求支付酒店订单，上文确定了订单ID\nPostconditions:\n    - 确认支付并更新订单状态为已支付",
+      "parameters": {
+        "properties": {
+          "order_id": {
+            "description": "订单ID",
+            "title": "Order Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "order_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "pay_attraction_order",
+      "description": "用户进行门票订单支付\n\nPreconditions:\n    - 在景点旅游场景，用户请求支付景点门票订单，上文确定了订单ID\nPostconditions:\n    - 确认支付并更新订单状态为已支付",
+      "parameters": {
+        "properties": {
+          "order_id": {
+            "description": "订单ID",
+            "title": "Order Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "order_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "pay_flight_order",
+      "description": "用户进行机票订单支付\n\nPreconditions:\n    - 在机票查询购买场景，用户请求支付航班订单，上文确定了订单ID\nPostconditions:\n    - 确认支付并更新订单状态为已支付",
+      "parameters": {
+        "properties": {
+          "order_id": {
+            "description": "订单ID",
+            "title": "Order Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "order_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "pay_train_order",
+      "description": "用户进行火车票订单支付\n\nPreconditions:\n    - 在火车票查询购买场景，用户请求支付火车票订单，上文确定了订单ID\nPostconditions:\n    - 确认支付并更新订单状态为已支付",
+      "parameters": {
+        "properties": {
+          "order_id": {
+            "description": "订单ID",
+            "title": "Order Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "order_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "search_hotel_order",
+      "description": "根据用户ID，查询用户的酒店订单，返回包含订单ID、订单类型、用户ID、酒店ID、订单总价、下单时间、更新时间和订单状态\n\nPreconditions:\n    - 用户需求为查询酒店订单\nPostconditions:\n    - 返回订单信息，方便之后进行修改/取消",
+      "parameters": {
+        "properties": {
+          "user_id": {
+            "description": "用户ID",
+            "title": "User Id",
+            "type": "string"
+          },
+          "date": {
+            "default": null,
+            "description": "日期",
+            "title": "Date",
+            "type": "string"
+          },
+          "status": {
+            "default": "paid",
+            "description": "订单状态",
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "search_attraction_order",
+      "description": "根据用户ID，查询用户的景点门票订单，返回包含订单ID、订单类型、用户ID、景点ID、订单总价、下单时间、更新时间和订单状态\n\nPreconditions:\n    - 用户需求为查询景点门票订单\nPostconditions:\n    - 返回订单信息，方便之后进行修改/取消",
+      "parameters": {
+        "properties": {
+          "user_id": {
+            "description": "用户ID",
+            "title": "User Id",
+            "type": "string"
+          },
+          "date": {
+            "default": null,
+            "description": "日期",
+            "title": "Date",
+            "type": "string"
+          },
+          "status": {
+            "default": "paid",
+            "description": "订单状态",
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "search_flight_order",
+      "description": "根据用户ID，查询用户的机票订单，返回包含订单ID、订单类型、用户ID、航班ID、订单总价、下单时间、更新时间和订单状态\n\nPreconditions:\n    - 用户需求为查询机票订单\nPostconditions:\n    - 返回订单信息，方便之后进行修改/取消",
+      "parameters": {
+        "properties": {
+          "user_id": {
+            "description": "用户ID",
+            "title": "User Id",
+            "type": "string"
+          },
+          "date": {
+            "default": null,
+            "description": "日期",
+            "title": "Date",
+            "type": "string"
+          },
+          "status": {
+            "default": "paid",
+            "description": "订单状态",
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "search_train_order",
+      "description": "根据用户ID，查询用户的火车票订单，返回包含订单ID、订单类型、用户ID、火车ID、订单总价、下单时间、更新时间和订单状态\n\nPreconditions:\n    - 用户需求为查询火车票订单\nPostconditions:\n    - 返回订单信息，方便之后进行修改/取消",
+      "parameters": {
+        "properties": {
+          "user_id": {
+            "description": "用户ID",
+            "title": "User Id",
+            "type": "string"
+          },
+          "date": {
+            "default": null,
+            "description": "日期",
+            "title": "Date",
+            "type": "string"
+          },
+          "status": {
+            "default": "paid",
+            "description": "订单状态",
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_hotel_order_detail",
+      "description": "获取酒店订单详情，包含订单ID、订单类型、用户ID、酒店ID、订单总价、下单时间、更新时间、订单状态和订单房间详细信息（房间类型、入住日期、价格、房间ID）\n\nPreconditions:\n    - 用户请求获取酒店订单详情，上文确定了订单ID\nPostconditions:\n    - 返回订单详情",
+      "parameters": {
+        "properties": {
+          "order_id": {
+            "description": "订单ID",
+            "title": "Order Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "order_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_attraction_order_detail",
+      "description": "获取景点门票订单详情，包含订单ID、订单类型、用户ID、景点ID、订单总价、下单时间、更新时间、订单状态和订单景点详细信息（门票类型、日期、价格、门票ID）\n\nPreconditions:\n    - 用户请求获取景点门票订单详情，上文确定了订单ID\nPostconditions:\n    - 返回订单详情",
+      "parameters": {
+        "properties": {
+          "order_id": {
+            "description": "订单ID",
+            "title": "Order Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "order_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_flight_order_detail",
+      "description": "获取机票订单详情，包含订单ID、订单类型、用户ID、航班ID、订单总价、下单时间、更新时间、订单状态和订单机票详细信息（座位类型、日期、价格、座位ID）\n\nPreconditions:\n    - 用户请求获取机票订单详情，上文确定了订单ID\nPostconditions:\n    - 返回订单详情",
+      "parameters": {
+        "properties": {
+          "order_id": {
+            "description": "订单ID",
+            "title": "Order Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "order_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_train_order_detail",
+      "description": "获取火车票订单详情，包含订单ID、订单类型、用户ID、火车ID、订单总价、下单时间、更新时间、订单状态和订单火车票详细信息（座位类型、日期、价格、座位ID）\n\nPreconditions:\n    - 用户请求获取火车票订单详情，上文确定了订单ID\nPostconditions:\n    - 返回订单详情",
+      "parameters": {
+        "properties": {
+          "order_id": {
+            "description": "订单ID",
+            "title": "Order Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "order_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "modify_train_order",
+      "description": "修改火车票订单，支持更改出发日期，自动处理补差价或退差价。\n\nPreconditions:\n    - 在火车票查询购买场景，用户请求修改火车票订单，上文确定了订单ID\nPostconditions:\n    - 修改订单并更新订单状态，若需补差价，订单状态改为unpaid，否则保持原状态，如需补差价，需引导用户支付当笔订单",
+      "parameters": {
+        "properties": {
+          "order_id": {
+            "description": "订单ID",
+            "title": "Order Id",
+            "type": "string"
+          },
+          "user_id": {
+            "description": "用户ID",
+            "title": "User Id",
+            "type": "string"
+          },
+          "new_date": {
+            "description": "新的出发日期，格式为 %Y-%m-%d",
+            "title": "New Date",
+            "type": "string"
+          }
+        },
+        "required": [
+          "order_id",
+          "user_id",
+          "new_date"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "modify_flight_order",
+      "description": "修改机票订单，支持更改出发日期，自动处理补差价或退差价。\n\nPreconditions:\n    - 在机票查询购买场景，用户请求修改机票订单，上文确定了订单ID\nPostconditions:\n    - 修改订单并更新订单状态，若需补差价，订单状态改为unpaid，否则保持原状态，如需补差价，需引导用户支付当笔订单",
+      "parameters": {
+        "properties": {
+          "order_id": {
+            "description": "订单ID",
+            "title": "Order Id",
+            "type": "string"
+          },
+          "user_id": {
+            "description": "用户ID",
+            "title": "User Id",
+            "type": "string"
+          },
+          "new_date": {
+            "description": "新的出发日期，格式为 %Y-%m-%d",
+            "title": "New Date",
+            "type": "string"
+          }
+        },
+        "required": [
+          "order_id",
+          "user_id",
+          "new_date"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "cancel_hotel_order",
+      "description": "用户取消已预订的酒店订单\n\nPreconditions:\n    - 在酒店查询预订场景，用户请求取消酒店订单，上文确定了订单ID\nPostconditions:\n    - 取消订单并更新订单状态，若需退差价，告知用户即可",
+      "parameters": {
+        "properties": {
+          "order_id": {
+            "description": "订单ID",
+            "title": "Order Id",
+            "type": "string"
+          },
+          "user_id": {
+            "description": "用户ID",
+            "title": "User Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "order_id",
+          "user_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "cancel_attraction_order",
+      "description": "用户取消已预订的景点门票订单\n\nPreconditions:\n    - 历史对话中有订单id或者已经进行过订单查询，用户有权限取消该订单\nPostconditions:\n    - 如果退差价，告知用户即可",
+      "parameters": {
+        "properties": {
+          "order_id": {
+            "description": "订单ID",
+            "title": "Order Id",
+            "type": "string"
+          },
+          "user_id": {
+            "description": "用户ID",
+            "title": "User Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "order_id",
+          "user_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "cancel_flight_order",
+      "description": "用户取消已预订的机票订单\n\nPreconditions:\n    - 历史对话中有订单id或者已经进行过订单查询，用户有权限取消该订单\nPostconditions:\n    - 如果退差价，告知用户即可",
+      "parameters": {
+        "properties": {
+          "order_id": {
+            "description": "订单ID",
+            "title": "Order Id",
+            "type": "string"
+          },
+          "user_id": {
+            "description": "用户ID",
+            "title": "User Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "order_id",
+          "user_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "cancel_train_order",
+      "description": "用户取消已预订的火车票订单\n\nPreconditions:\n    - 历史对话中有订单id或者已经进行过订单查询，用户有权限取消该订单\nPostconditions:\n    - 如果退差价，告知用户即可",
+      "parameters": {
+        "properties": {
+          "order_id": {
+            "description": "订单ID",
+            "title": "Order Id",
+            "type": "string"
+          },
+          "user_id": {
+            "description": "用户ID",
+            "title": "User Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "order_id",
+          "user_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_taxi_info",
+      "description": "获取打车服务信息，包含打车服务id、车型、平台、出发地、目的地、预估时间、预估价格、标签、可用服务列表\n\nPreconditions:\n    - 在打车出行场景，需要获取打车服务的详细信息\nPostconditions:\n    - 返回打车服务的详细信息，引导用户选择车型并下单",
+      "parameters": {
+        "properties": {
+          "taxi_id": {
+            "description": "打车服务id",
+            "title": "Taxi Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "taxi_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "taxi_search",
+      "description": "根据出发地和目的地搜索可用的打车服务，提供打车服务的基础信息，包含服务id、车型、平台、出发地、目的地、预估时间、预估价格、标签\n\nPreconditions:\n    - 用户请求打车，给出了出发地和目的地\nPostconditions:\n    - 返回符合条件的打车服务列表，如需查看详情需使用打车详情查询工具，引导用户选择服务",
+      "parameters": {
+        "properties": {
+          "departure_location": {
+            "description": "出发地点",
+            "title": "Departure Location",
+            "type": "string"
+          },
+          "arrival_location": {
+            "description": "目的地点",
+            "title": "Arrival Location",
+            "type": "string"
+          }
+        },
+        "required": [
+          "departure_location",
+          "arrival_location"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "create_taxi_order",
+      "description": "用户根据打车服务和车型下单叫车，系统返回打车订单信息\n\nPreconditions:\n    - 在打车出行场景，用户请求叫车，给出了叫车相关必要信息\nPostconditions:\n    - 生成订单，请用户确认支付",
+      "parameters": {
+        "properties": {
+          "taxi_id": {
+            "description": "打车服务ID",
+            "title": "Taxi Id",
+            "type": "string"
+          },
+          "product_id": {
+            "description": "车型产品ID",
+            "title": "Product Id",
+            "type": "string"
+          },
+          "user_id": {
+            "description": "用户ID",
+            "title": "User Id",
+            "type": "string"
+          },
+          "quantity": {
+            "default": 1,
+            "description": "数量",
+            "title": "Quantity",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "taxi_id",
+          "product_id",
+          "user_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "pay_taxi_order",
+      "description": "用户进行打车订单支付\n\nPreconditions:\n    - 在打车出行场景，用户请求支付打车订单，上文确定了订单ID\nPostconditions:\n    - 确认支付并更新订单状态为已支付",
+      "parameters": {
+        "properties": {
+          "order_id": {
+            "description": "订单ID",
+            "title": "Order Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "order_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "cancel_taxi_order",
+      "description": "用户取消已预订的打车订单\n\nPreconditions:\n    - 历史对话中有订单id或者已经进行过订单查询，用户有权限取消该订单\nPostconditions:\n    - 如果退差价，告知用户即可",
+      "parameters": {
+        "properties": {
+          "order_id": {
+            "description": "订单ID",
+            "title": "Order Id",
+            "type": "string"
+          },
+          "user_id": {
+            "description": "用户ID",
+            "title": "User Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "order_id",
+          "user_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "search_taxi_order",
+      "description": "根据用户ID，查询用户的打车订单，返回包含订单ID、订单类型、用户ID、打车服务ID、订单总价、下单时间、更新时间和订单状态\n\nPreconditions:\n    - 用户需求为查询打车订单\nPostconditions:\n    - 返回订单信息，方便之后进行取消",
+      "parameters": {
+        "properties": {
+          "user_id": {
+            "description": "用户ID",
+            "title": "User Id",
+            "type": "string"
+          },
+          "status": {
+            "default": "paid",
+            "description": "订单状态",
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_taxi_order_detail",
+      "description": "获取打车订单详情，包含订单ID、订单类型、用户ID、打车服务ID、订单总价、下单时间、更新时间、订单状态和订单打车详细信息\n\nPreconditions:\n    - 用户请求获取打车订单详情，上文确定了订单ID\nPostconditions:\n    - 返回订单详情",
+      "parameters": {
+        "properties": {
+          "order_id": {
+            "description": "订单ID",
+            "title": "Order Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "order_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  }
+]

@@ -1,0 +1,19 @@
+
+        TASK
+        - You will be given a piece of expected information and a conversation between an agent and a customer.
+        - Your job is to decide whether the agent communicated the expected information to the customer at any point in the conversation.
+        - The information counts as communicated if its meaning was clearly conveyed to the customer. Exact wording, formatting, number/date formatting, language, or script do NOT need to match.
+        - Paraphrases, translations, transliterations/romanizations, and code-switched phrasings of the expected information all count, as long as the meaning is preserved.
+        - If the agent never conveyed the information, or conveyed contradictory information, it does not count.
+
+        FORMAT
+        - Your response should be a JSON object with the following fields:
+        - `reasoning`: a short explanation for your decision
+        - `met`: `true` if the agent communicated the expected information, `false` otherwise
+
+        Example response structure:
+        {
+            "reasoning": "<reasoning trace>",
+            "met": <true or false>
+        }
+        

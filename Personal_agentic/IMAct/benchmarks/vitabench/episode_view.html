@@ -1,0 +1,72 @@
+<div id="imact-episode-view">
+  <style>
+    #imact-episode-view {color:var(--foreground);overflow-wrap:anywhere}
+    #imact-episode-view .block {margin-top:calc(var(--font-size-base)*1)}
+    #imact-episode-view .flow {display:flex;flex-wrap:wrap;gap:calc(var(--font-size-base)*.5);align-items:center;margin:calc(var(--font-size-base)*1) 0}
+    #imact-episode-view .flow span {color:var(--foreground)}
+    #imact-episode-view .flow .active {font-weight:500;text-decoration:underline;text-decoration-color:var(--viz-series-1);text-underline-offset:5px}
+    #imact-episode-view pre {white-space:pre-wrap;overflow-wrap:anywhere;margin:calc(var(--font-size-base)*.5) 0}
+    #imact-episode-view td {vertical-align:top}
+    #imact-episode-view td pre {margin:0}
+    #imact-episode-view details {margin-top:calc(var(--font-size-base)*.75)}
+    #imact-episode-view summary {color:var(--foreground)}
+    #imact-episode-view .controls {display:flex;gap:calc(var(--font-size-base)*.5);flex-wrap:wrap;align-items:center}
+    #imact-episode-view .select-wrap {flex:1;min-width:180px}
+    #imact-episode-view h3 {margin-top:calc(var(--font-size-base)*1);margin-bottom:calc(var(--font-size-base)*.25)}
+    #imact-episode-view .change-table {table-layout:fixed;width:100%}
+    #imact-episode-view .change-table th:first-child {width:22%}
+    @media(max-width:480px){#imact-episode-view .change-table,#imact-episode-view .change-table tbody,#imact-episode-view .change-table tr,#imact-episode-view .change-table td {display:block}#imact-episode-view .change-table thead{display:none}#imact-episode-view .change-table td:before{content:attr(data-label);display:block;font-weight:500}}
+  </style>
+  <h2 data-id="title"></h2>
+  <p data-id="result" class="text-small block"></p>
+  <div class="flow" aria-label="执行链路"><span>用户问题</span><span aria-hidden="true">→</span><span>Memory</span><span aria-hidden="true">→</span><span>模型提案</span><span aria-hidden="true">→</span><span>校验与写入</span><span aria-hidden="true">→</span><span>工具与用户反馈</span></div>
+  <p data-id="question"></p>
+  <details><summary>Memory 请求与返回（含失败与补查）</summary><div data-id="memories"></div></details>
+  <details><summary>用户各次发言</summary><div data-id="users"></div></details>
+  <hr>
+  <div class="controls">
+    <button class="btn" type="button" data-id="prev">上一轮</button>
+    <div class="select-wrap"><label class="form-label" for="imact-round">Action 模型调用轮次</label><select class="form-select" id="imact-round" data-id="round"></select></div>
+    <button class="btn" type="button" data-id="next">下一轮</button>
+  </div>
+  <section data-id="detail" aria-live="polite" class="block"></section>
+  <hr>
+  <details><summary>最终订单与任务完成证据</summary><pre data-id="final"></pre></details>
+  <p class="text-small block">真实模型 / Memory 请求 · 业务工具执行于 VitaBench 模拟环境 · 裁判未运行</p>
+  <script type="application/json" data-id="data">__EPISODE_DATA__</script>
+</div>
+<script>
+(() => {
+ const root=document.getElementById('imact-episode-view'),get=id=>root.querySelector('[data-id="'+id+'"]');
+ const D=JSON.parse(get('data').textContent),J=v=>typeof v==='string'?v:JSON.stringify(v,null,2);
+ const make=(tag,text,parent,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;if(parent)parent.append(n);return n};
+ const raw=(parent,label,value)=>{const d=make('details',undefined,parent);make('summary',label,d);make('pre',J(value),d);return d};
+ const table=(parent,rows)=>{if(!rows.length){make('p','无已提交修改',parent);return;}const t=make('table',undefined,parent,'table table-sm change-table');const head=make('tr',undefined,make('thead',undefined,t));['字段 / 笔记','修改前','修改后'].forEach(v=>make('th',v,head));const b=make('tbody',undefined,t);rows.forEach(r=>{const tr=make('tr',undefined,b);const values=[r.field,r.before_present?J(r.before):'未设置',r.after_present?J(r.after):'已删除'];values.forEach((v,i)=>{const td=make('td',undefined,tr);td.dataset.label=['字段 / 笔记','修改前','修改后'][i];make('pre',v,td);});});};
+ const labels={delivery:'外卖',instore:'到店',ota:'出行与住宿'};
+ get('title').textContent=(labels[D.manifest.domain]||D.manifest.domain||'任务')+' · '+(D.manifest.subtask_id||'回放');
+ get('question').textContent=D.manifest.instruction||'';
+ get('result').textContent=(D.completion_verified_by_harness?'Harness 已核验任务完成':'尚无 Harness 完成证据')+' ｜ '+D.rounds.length+' 次 Action 调用 ｜ '+(D.summary.termination_reason||D.manifest.status||'运行中');
+ D.memory_events.forEach(e=>{const phase=e.correlation.phase==='prefetch'?'首轮预取':'主动补查';const labels={memory_request:'请求',memory_response:'原始返回',memory_normalized:'注入 Harness',memory_error:'错误'};raw(get('memories'),phase+' · '+(labels[e.stage]||e.stage)+' · #'+e.seq,e.data);});
+ D.user_messages.forEach(e=>{make('p',(e.data.message||{}).content||J(e.data),get('users'),'block');});
+ get('final').textContent=J({completion_actions:D.completion_actions,states:D.final_workspaces.map(s=>({task_id:s.task_id,rev:s.rev,task:s.workspace.task,progress:s.workspace.progress,orders:s.workspace.orders})),snapshot_coverage:D.snapshot_coverage});
+ D.rounds.forEach((r,i)=>{const o=make('option',String(i+1)+' · '+r.event_id+' · '+(r.accepted?'校验通过':(r.error||{}).code||'未提交'),get('round'));o.value=String(i);});
+ let selected=0;
+ function render(index){selected=Math.max(0,Math.min(D.rounds.length-1,Number(index)||0));get('round').value=String(selected);get('prev').disabled=selected<=0;get('next').disabled=selected>=D.rounds.length-1;const box=get('detail');box.replaceChildren();const r=D.rounds[selected];if(!r){make('p','本次未产生 Action 模型尝试。',box);return;}
+  make('h3','第 '+r.index+' 次调用 · '+r.event_id,box);
+  const u=(r.metadata||{}).usage||{};make('p',(r.accepted?'提案已通过校验':'提案未通过校验')+' ｜ 输入 '+(u.prompt_tokens??'—')+' / 输出 '+(u.completion_tokens??'—')+' tokens ｜ '+r.candidate_count+' 个候选',box,'text-small');
+  if(r.error)make('p',r.error.code+'：'+r.error.message,box,'text-destructive');
+  make('h3','本轮触发与工具反馈',box);raw(box,r.incoming.type==='tool_results'?'展开工具回执':r.incoming.type==='memory_result'?'展开 Memory 返回':'展开输入事件',r.incoming);
+  if(r.repair_feedback.length)raw(box,'前次失败反馈',r.repair_feedback);
+  const d=r.decision||{};make('h3','模型提出的修改',box);raw(box,'Task State 修改提案',d.task_changes??'没有有效 JSON');raw(box,'Working Memory 笔记提案',d.working_notes??'没有有效 JSON');
+  make('h3','实际写入的变化',box);make('p',r.committed?'提交版本 rev='+r.committed_rev+(r.accepted?'':'；拒绝提案，保留回退结果'):'本次没有提交，提案未写入',box);
+  make('h3','Task State',box);table(box,r.task_changes);make('h3','Working Memory',box);table(box,r.note_changes);
+  make('h3','模型返回的下一步',box);make('pre',J(d.next_action??'没有有效动作'),box);if(r.committed_action)raw(box,'Harness 实际输出动作',r.committed_action);
+  raw(box,'完整模型返回',r.raw_output);if(r.reasoning)raw(box,'服务返回的 reasoning 字段',r.reasoning);raw(box,'模型请求 ID 与 usage',r.metadata);if(r.workspace)raw(box,'本轮提交后的完整 Working Memory 与业务状态',r.workspace);
+ }
+ const saved=window.openai?.widgetState?.modelContent;
+ if(saved?.subtask_id===D.manifest.subtask_id)selected=saved.round_index||0;
+ function choose(index){render(index);window.openai?.setWidgetState?.({modelContent:{subtask_id:D.manifest.subtask_id,round_index:selected,event_id:D.rounds[selected]?.event_id},privateContent:null})?.catch(()=>{});}
+ get('prev').onclick=()=>choose(selected-1);get('next').onclick=()=>choose(selected+1);get('round').onchange=e=>choose(e.target.value);
+ window.addEventListener('openai:set_globals',e=>{const s=e.detail?.globals?.widgetState?.modelContent;if(s?.subtask_id===D.manifest.subtask_id)render(s.round_index);});render(selected);
+})();
+</script>

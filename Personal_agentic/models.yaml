@@ -1,0 +1,100 @@
+# 唯一的模型配置入口。别名可自由命名, model 必须是服务端接受的精确名字。
+# .env 相对此文件解析;已导出的 shell 环境变量优先于 .env。
+env_file: .env
+roles:
+  action: openrouter-qwen3.6-35b-a3b
+  user: openrouter-deepseek-v4.1-flash
+  judge: openrouter-deepseek-v4.1-flash
+
+models:
+  openrouter-qwen3.6-35b-a3b:
+    provider: openrouter
+    model: qwen/qwen3.6-35b-a3b
+    api_key_env: OPENROUTER_API_KEY
+    timeout_s: 300
+    params: {max_tokens: 12000, temperature: 0.0}
+    options: {app_title: IMAct, reasoning: {enabled: false}}
+
+  openrouter-deepseek-v4.1-flash:
+    provider: openrouter
+    model: deepseek/deepseek-v4.1-flash-1017
+    api_key_env: OPENROUTER_API_KEY
+    timeout_s: 300
+    params: {max_tokens: 12000, temperature: 0.0}
+    options: {app_title: IMAct}
+
+  deepseek-v4.1-flash:
+    provider: openai_compatible
+    model: DeepSeek-V4.1-Flash-1017
+    base_url: https://antchat.alipay.com/v1/chat/completions
+    api_key_env: ANTCHAT_API_KEY
+    timeout_s: 600
+    options: {merge_system_messages: true}
+    params: {stream: false, max_tokens: 12000, temperature: 0.0}
+    extra_body: {chat_template_kwargs: {enable_thinking: false}}
+
+  qwen3.8-27b:
+    provider: openai_compatible
+    model: Qwen3.8-27B
+    base_url: https://antchat.alipay.com/v1/chat/completions
+    api_key_env: ANTCHAT_API_KEY
+    # 可按需配置 headers(固定值) / headers_env(header 名 → 环境变量名)。
+    # 此接口不要求 SOFA-TraceId / SOFA-RpcId。
+    timeout_s: 300  # 输出预算增大后允许更长生成时间;执行层超时自动跟随为330秒
+    options: {merge_system_messages: true}  # AntChat 只接受一条开头的 system 消息
+    # 如 Python 报证书链错误,可指定本机受信 CA: ca_bundle: /etc/ssl/cert.pem
+    params:
+      stream: false
+      max_tokens: 16384  # 同时容纳推理输出与最终动作JSON
+    extra_body: {}  # 服务专有字段,原样并入请求体,优先于 params
+
+  gpt-5.6-sol:
+    provider: openai_responses
+    model: gpt-5.6-sol
+    base_url: https://matrixllm.alipay.com/v1/responses
+    api_key_env: MATRIXLLM_API_KEY
+    headers_env: {X-LY-TOKEN: X_LY_TOKEN_GPT}
+    timeout_s: 120
+    params: {stream: true, max_output_tokens: 4096}
+
+  claude-opus-4-6:
+    provider: anthropic_messages
+    model: claude-opus-4-6
+    base_url: https://matrixllm.alipay.com/anthropic/v1/messages
+    api_key_env: MATRIXLLM_API_KEY
+    headers_env: {X-LY-TOKEN: X_LY_TOKEN_CLAUDE}
+    timeout_s: 120
+    params: {stream: true, max_tokens: 4096}
+
+  claude-opus-5:
+    provider: anthropic_messages
+    model: claude-opus-5
+    base_url: https://matrixllm.alipay.com/anthropic/v1/messages
+    api_key_env: MATRIXLLM_API_KEY
+    headers_env: {X-LY-TOKEN: X_LY_TOKEN_CLAUDE}
+    timeout_s: 120
+    params: {stream: true, max_tokens: 4096}
+
+  gemini-3.5-flash:
+    provider: openai_compatible
+    model: gemini-3.5-flash
+    base_url: https://matrixllm.alipay.com/v1/chat/completions
+    api_key_env: MATRIXLLM_API_KEY
+    headers_env: {X-LY-TOKEN: X_LY_TOKEN_GEMINI}
+    timeout_s: 120
+    params: {stream: false, max_tokens: 4096}
+
+  openrouter-gpt-5.5:
+    provider: openrouter
+    model: openai/gpt-5.5
+    api_key_env: OPENROUTER_API_KEY
+    timeout_s: 120
+    params: {max_completion_tokens: 4096}
+    options: {app_title: IMAct}
+
+  openrouter-gpt-4.1:
+    provider: openrouter
+    model: openai/gpt-4.1
+    api_key_env: OPENROUTER_API_KEY
+    timeout_s: 120
+    params: {max_tokens: 4096, temperature: 0.0}

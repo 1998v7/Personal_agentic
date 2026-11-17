@@ -1,0 +1,29 @@
+# uni-agent 的 Task Config:按 Task 名给运行参数(样本里只有 name + metadata,见 pat_train/preprocess.py)。
+# 解析顺序:这里的缺省 → 样本 → 运行时的模型地址(agent.model.base_url / model_name 由 uni-agent 填)。
+# sandbox 只是满足 TaskConfig 的格式要求:IMAct 的环境都在进程内,Task 不会构建 sandbox。
+# models_file 缺省为 personal_agent_train/configs/models.yaml(用户模拟器与裁判),也可用环境变量 PAT_MODELS_FILE。
+
+- name: imact_tau2
+  sandbox: {provider: local}
+  agent:
+    name: imact
+    max_tokens_per_turn: 1024
+  max_steps: 80        # 一段对话的消息步数上限(评测时是 200;训练时限制长度,超了按 τ² 规则记 0 分;telecom 常需 40+)
+  max_errors: 10
+  communicate_scorer: semantic
+
+- name: imact_mcp_universe
+  sandbox: {provider: local}
+  agent:
+    name: imact
+    max_tokens_per_turn: 1024
+  reward: ae           # ae = 通过的评估器占比;sr = 全部通过才 1
+
+- name: imact_vitabench
+  sandbox: {provider: local}
+  agent:
+    name: imact
+    max_tokens_per_turn: 4096   # 执行层的 JSON 决策(含证据引用)比原生工具调用长
+  max_steps: 50
+  language: chinese
+  # outer_config: 执行层与 Memory 的运行配置,缺省 Personal_agentic/config.vitabench.yaml;memory.backend 不能是 none

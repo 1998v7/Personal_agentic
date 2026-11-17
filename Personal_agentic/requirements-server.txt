@@ -1,0 +1,29 @@
+# 服务器环境依赖(Python >= 3.11)。前一段是我们 + 执行层,后一段是 VitaBench 环境与工具(IMAct/benchmarks/vitabench)用到的包。
+fastapi>=0.162,<1
+uvicorn>=0.54,<1
+pydantic>=2.14,<3
+httpx2[socks]>=2.16,<3
+jsonschema>=4.26,<5
+httpx>=0.28,<1
+pyyaml>=6
+python-dotenv>=1
+Jinja2>=3.1,<4
+
+# --- IMAct/benchmarks/{vitabench,tau2}:环境、工具与 DB;评分用 json-repair 解析裁判输出 ---
+addict
+docstring-parser>=0.16
+holidays
+json-repair
+thefuzz
+toml
+tzdata  # Windows 没有系统时区库,zoneinfo 解析 Europe/Madrid 等本地化时区需要它
+typing-extensions>=4.0.0
+
+# --- IMAct.harness.mcp 与 IMAct/benchmarks/mcp_universe:经网关的 MCP 客户端;各领域评分函数(checks/)用到的库 ---
+# yfinance / playwright 的评估也可以交给远端执行(EVAL_REMOTE_URL),但评分函数的导入仍然需要这些库。
+# 只有在本机执行 playwright 类评估时才需要再运行一次 `playwright install chromium`。
+mcp>=2,<3
+pandas
+yfinance
+beautifulsoup4
+playwright

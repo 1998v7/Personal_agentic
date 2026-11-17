@@ -1,0 +1,9 @@
+
+        Did the agent communicate the following information to the user?
+
+        expected information:
+        {info_str}
+
+        Conversation transcript:
+        {transcript}
+        

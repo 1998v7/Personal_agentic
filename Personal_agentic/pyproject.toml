@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "imact-harness"
+version = "0.1.0"
+description = "IMAct execution-layer harness: glue between the Action model, the Memory model and the benchmark."
+requires-python = ">=3.10"
+dependencies = [
+    "httpx>=0.28,<1",
+    "pydantic>=2.5",
+    "pyyaml>=6",
+    "python-dotenv>=1",
+    "Jinja2>=3.1,<4",  # 本地 Memory 的 Navigator/Reader 模板
+    # IMAct.benchmarks.vitabench:环境、工具与 DB
+    "addict",
+    "docstring-parser>=0.16",
+    "holidays",
+    "thefuzz",
+    "typing-extensions>=4.0.0",
+    # IMAct.benchmarks.tau2:读写 toml 数据
+    "toml",
+    "tzdata",  # Windows 没有系统时区库,本地化 cell 的时区(Europe/Madrid 等)需要它
+    # IMAct.evaluation:解析裁判输出
+    "json-repair",
+    # IMAct.harness.mcp 与 IMAct.benchmarks.mcp_universe:经网关的 MCP 客户端;各领域评分函数(checks/)用到的库
+    "mcp>=2,<3",
+    "pandas",
+    "yfinance",
+    "beautifulsoup4",
+    "playwright",
+]
+
+[tool.setuptools.packages.find]
+include = ["IMAct*"]
+
+[tool.setuptools.package-data]
+"IMAct.benchmarks.vitabench" = ["episode_view.html", "episode_standalone.css", "full_chain_view.html", "LICENSE", "ORIGIN"]
+"IMAct.benchmarks.vitabench.prompts" = ["*.yaml"]
+"IMAct.benchmarks.tau2" = ["LICENSE", "ORIGIN"]
+"IMAct.benchmarks.tau2.prompt_templates" = ["*.txt", "*.json"]
+"IMAct.benchmarks.mcp_universe" = ["LICENSE", "ORIGIN", "domains.yaml", "task_data/*/*.json"]
+"IMAct.benchmarks.mcp_universe.prompt_templates" = ["*.j2"]
+"IMAct.benchmarks.personamem_v3" = ["LICENSE", "ORIGIN"]
+"IMAct.evaluation" = ["*.yaml", "LICENSE.vitabench", "LICENSE.tau2"]
+"IMAct.evaluation.tau2_prompts" = ["*.txt"]

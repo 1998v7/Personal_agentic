@@ -1,0 +1,17 @@
+# 相对路径相对于本文件。密钥只从环境变量读取。
+[model]
+base_url = ""                 # 如 https://your-gateway.example/v1
+name = ""                     # 网关实际支持的 model 名称
+api_key_env = "IMACT_MODEL_API_KEY"
+timeout_seconds = 90
+max_output_tokens = 4096
+response_format = "text"       # 支持时可改为 json_object
+# 留空的 base_url/name 会读取 IMACT_MODEL_BASE_URL / IMACT_MODEL_NAME。
+
+[runtime]
+output_dir = "../data"
+# 单次模型决策调用的总时限，必须大于 model.timeout_seconds。
+# 省略时自动取 max(120, model.timeout_seconds + 30)。上层客户端需留出额外时间。
+decision_timeout_seconds = 120
+max_decision_attempts = 3
+context_max_bytes = 240000

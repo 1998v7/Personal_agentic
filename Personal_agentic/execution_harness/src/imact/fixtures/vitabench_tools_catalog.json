@@ -1,0 +1,733 @@
+{
+  "repository": "https://github.com/meituan-longcat/vitabench-2.0",
+  "revision": "f60169e89f30499cb7883f3dad76bd03facc908d",
+  "files": {
+    "src/vita/domains/delivery/tools.py": "d56eb645b4e311834a67bdf7aa2cbee317c081563e75773f8069b326033e0ef3",
+    "src/vita/domains/delivery/data_model.py": "0e7a14fbc5a882c94ee82c229b06ea35baaa76a4c611045538e6ab005a628076",
+    "src/vita/domains/instore/tools.py": "98417e1e1910f4f41cdca82e91e68861f24e8931702030c41b61252bb010e9c7",
+    "src/vita/domains/instore/data_model.py": "716f331ba7ff099885db9db15ac31d9cf20a92f90c1efb4e7da4c83983b36037",
+    "src/vita/domains/ota/tools.py": "a7b8f130c629df6ce5f43c45ddd8d656e7d9e3c0a682296ff5798a85bfb56a9e",
+    "src/vita/domains/ota/data_model.py": "1ca2290674ced601801934b4d669922444c9721c296b647f3f116282c4dd39e4",
+    "src/vita/environment/toolkit.py": "6e3e6e981bddc8c44c412ed418541c8d8a4c4b680c301727d4c68a97ab281f91",
+    "src/vita/data_model/tasks.py": "71b7a86fbe33d1f2f380ab7046e0c4a06df9acfe13b1a39fabc3754984b07cda"
+  },
+  "tools": {
+    "delivery_distance_to_time": {
+      "domain": "delivery",
+      "type": "GENERIC",
+      "source": "src/vita/domains/delivery/tools.py",
+      "line": 138,
+      "parameters": [
+        "distance"
+      ]
+    },
+    "get_delivery_store_info": {
+      "domain": "delivery",
+      "type": "READ",
+      "source": "src/vita/domains/delivery/tools.py",
+      "line": 144,
+      "parameters": [
+        "store_id"
+      ]
+    },
+    "get_delivery_product_info": {
+      "domain": "delivery",
+      "type": "READ",
+      "source": "src/vita/domains/delivery/tools.py",
+      "line": 149,
+      "parameters": [
+        "product_id"
+      ]
+    },
+    "delivery_store_search_recommand": {
+      "domain": "delivery",
+      "type": "READ",
+      "source": "src/vita/domains/delivery/tools.py",
+      "line": 154,
+      "parameters": [
+        "keywords"
+      ]
+    },
+    "delivery_product_search_recommand": {
+      "domain": "delivery",
+      "type": "READ",
+      "source": "src/vita/domains/delivery/tools.py",
+      "line": 164,
+      "parameters": [
+        "keywords"
+      ]
+    },
+    "create_delivery_order": {
+      "domain": "delivery",
+      "type": "WRITE",
+      "source": "src/vita/domains/delivery/tools.py",
+      "line": 174,
+      "parameters": [
+        "user_id",
+        "store_id",
+        "product_ids",
+        "product_cnts",
+        "address",
+        "dispatch_time",
+        "attributes",
+        "note"
+      ]
+    },
+    "pay_delivery_order": {
+      "domain": "delivery",
+      "type": "WRITE",
+      "source": "src/vita/domains/delivery/tools.py",
+      "line": 254,
+      "parameters": [
+        "order_id"
+      ]
+    },
+    "get_delivery_order_status": {
+      "domain": "delivery",
+      "type": "READ",
+      "source": "src/vita/domains/delivery/tools.py",
+      "line": 264,
+      "parameters": [
+        "order_id"
+      ]
+    },
+    "cancel_delivery_order": {
+      "domain": "delivery",
+      "type": "WRITE",
+      "source": "src/vita/domains/delivery/tools.py",
+      "line": 269,
+      "parameters": [
+        "order_id"
+      ]
+    },
+    "modify_delivery_order": {
+      "domain": "delivery",
+      "type": "WRITE",
+      "source": "src/vita/domains/delivery/tools.py",
+      "line": 280,
+      "parameters": [
+        "order_id",
+        "note"
+      ]
+    },
+    "search_delivery_orders": {
+      "domain": "delivery",
+      "type": "READ",
+      "source": "src/vita/domains/delivery/tools.py",
+      "line": 290,
+      "parameters": [
+        "user_id",
+        "status"
+      ]
+    },
+    "get_delivery_order_detail": {
+      "domain": "delivery",
+      "type": "READ",
+      "source": "src/vita/domains/delivery/tools.py",
+      "line": 305,
+      "parameters": [
+        "order_id"
+      ]
+    },
+    "instore_shop_search_recommend": {
+      "domain": "instore",
+      "type": "READ",
+      "source": "src/vita/domains/instore/tools.py",
+      "line": 176,
+      "parameters": [
+        "keywords"
+      ]
+    },
+    "instore_product_search_recommend": {
+      "domain": "instore",
+      "type": "READ",
+      "source": "src/vita/domains/instore/tools.py",
+      "line": 186,
+      "parameters": [
+        "keywords"
+      ]
+    },
+    "create_instore_product_order": {
+      "domain": "instore",
+      "type": "WRITE",
+      "source": "src/vita/domains/instore/tools.py",
+      "line": 196,
+      "parameters": [
+        "user_id",
+        "shop_id",
+        "product_id",
+        "quantity"
+      ]
+    },
+    "pay_instore_order": {
+      "domain": "instore",
+      "type": "WRITE",
+      "source": "src/vita/domains/instore/tools.py",
+      "line": 223,
+      "parameters": [
+        "order_id"
+      ]
+    },
+    "instore_cancel_order": {
+      "domain": "instore",
+      "type": "WRITE",
+      "source": "src/vita/domains/instore/tools.py",
+      "line": 237,
+      "parameters": [
+        "order_id"
+      ]
+    },
+    "instore_book": {
+      "domain": "instore",
+      "type": "WRITE",
+      "source": "src/vita/domains/instore/tools.py",
+      "line": 253,
+      "parameters": [
+        "user_id",
+        "shop_id",
+        "time",
+        "customer_count"
+      ]
+    },
+    "pay_instore_book": {
+      "domain": "instore",
+      "type": "WRITE",
+      "source": "src/vita/domains/instore/tools.py",
+      "line": 284,
+      "parameters": [
+        "book_id"
+      ]
+    },
+    "instore_cancel_book": {
+      "domain": "instore",
+      "type": "WRITE",
+      "source": "src/vita/domains/instore/tools.py",
+      "line": 301,
+      "parameters": [
+        "book_id"
+      ]
+    },
+    "instore_reservation": {
+      "domain": "instore",
+      "type": "WRITE",
+      "source": "src/vita/domains/instore/tools.py",
+      "line": 317,
+      "parameters": [
+        "user_id",
+        "shop_id",
+        "time",
+        "customer_count"
+      ]
+    },
+    "instore_modify_reservation": {
+      "domain": "instore",
+      "type": "WRITE",
+      "source": "src/vita/domains/instore/tools.py",
+      "line": 343,
+      "parameters": [
+        "reservation_id",
+        "time",
+        "customer_count"
+      ]
+    },
+    "instore_cancel_reservation": {
+      "domain": "instore",
+      "type": "WRITE",
+      "source": "src/vita/domains/instore/tools.py",
+      "line": 366,
+      "parameters": [
+        "reservation_id"
+      ]
+    },
+    "get_instore_orders": {
+      "domain": "instore",
+      "type": "READ",
+      "source": "src/vita/domains/instore/tools.py",
+      "line": 383,
+      "parameters": [
+        "user_id"
+      ]
+    },
+    "get_instore_reservations": {
+      "domain": "instore",
+      "type": "READ",
+      "source": "src/vita/domains/instore/tools.py",
+      "line": 400,
+      "parameters": [
+        "user_id"
+      ]
+    },
+    "get_instore_books": {
+      "domain": "instore",
+      "type": "READ",
+      "source": "src/vita/domains/instore/tools.py",
+      "line": 415,
+      "parameters": [
+        "user_id"
+      ]
+    },
+    "search_instore_book": {
+      "domain": "instore",
+      "type": "READ",
+      "source": "src/vita/domains/instore/tools.py",
+      "line": 430,
+      "parameters": [
+        "user_id",
+        "book_id"
+      ]
+    },
+    "search_instore_reservation": {
+      "domain": "instore",
+      "type": "READ",
+      "source": "src/vita/domains/instore/tools.py",
+      "line": 451,
+      "parameters": [
+        "user_id",
+        "reservation_id"
+      ]
+    },
+    "get_ota_hotel_info": {
+      "domain": "ota",
+      "type": "READ",
+      "source": "src/vita/domains/ota/tools.py",
+      "line": 186,
+      "parameters": [
+        "hotel_id"
+      ]
+    },
+    "get_ota_attraction_info": {
+      "domain": "ota",
+      "type": "READ",
+      "source": "src/vita/domains/ota/tools.py",
+      "line": 197,
+      "parameters": [
+        "attraction_id"
+      ]
+    },
+    "get_ota_flight_info": {
+      "domain": "ota",
+      "type": "READ",
+      "source": "src/vita/domains/ota/tools.py",
+      "line": 208,
+      "parameters": [
+        "flight_id"
+      ]
+    },
+    "get_ota_train_info": {
+      "domain": "ota",
+      "type": "READ",
+      "source": "src/vita/domains/ota/tools.py",
+      "line": 219,
+      "parameters": [
+        "train_id"
+      ]
+    },
+    "hotel_search_recommand": {
+      "domain": "ota",
+      "type": "READ",
+      "source": "src/vita/domains/ota/tools.py",
+      "line": 230,
+      "parameters": [
+        "city_name",
+        "key_words"
+      ]
+    },
+    "attractions_search_recommend": {
+      "domain": "ota",
+      "type": "READ",
+      "source": "src/vita/domains/ota/tools.py",
+      "line": 255,
+      "parameters": [
+        "city_name",
+        "key_words"
+      ]
+    },
+    "flight_search_recommend": {
+      "domain": "ota",
+      "type": "READ",
+      "source": "src/vita/domains/ota/tools.py",
+      "line": 276,
+      "parameters": [
+        "departure",
+        "destination"
+      ]
+    },
+    "train_ticket_search": {
+      "domain": "ota",
+      "type": "READ",
+      "source": "src/vita/domains/ota/tools.py",
+      "line": 294,
+      "parameters": [
+        "departure",
+        "destination",
+        "date"
+      ]
+    },
+    "create_hotel_order": {
+      "domain": "ota",
+      "type": "WRITE",
+      "source": "src/vita/domains/ota/tools.py",
+      "line": 319,
+      "parameters": [
+        "hotel_id",
+        "room_id",
+        "user_id"
+      ]
+    },
+    "create_attraction_order": {
+      "domain": "ota",
+      "type": "WRITE",
+      "source": "src/vita/domains/ota/tools.py",
+      "line": 359,
+      "parameters": [
+        "attraction_id",
+        "ticket_id",
+        "user_id",
+        "date",
+        "quantity"
+      ]
+    },
+    "create_flight_order": {
+      "domain": "ota",
+      "type": "WRITE",
+      "source": "src/vita/domains/ota/tools.py",
+      "line": 406,
+      "parameters": [
+        "flight_id",
+        "seat_id",
+        "user_id",
+        "date",
+        "quantity"
+      ]
+    },
+    "create_train_order": {
+      "domain": "ota",
+      "type": "WRITE",
+      "source": "src/vita/domains/ota/tools.py",
+      "line": 451,
+      "parameters": [
+        "train_id",
+        "seat_id",
+        "user_id",
+        "date",
+        "quantity"
+      ]
+    },
+    "pay_hotel_order": {
+      "domain": "ota",
+      "type": "WRITE",
+      "source": "src/vita/domains/ota/tools.py",
+      "line": 496,
+      "parameters": [
+        "order_id"
+      ]
+    },
+    "pay_attraction_order": {
+      "domain": "ota",
+      "type": "WRITE",
+      "source": "src/vita/domains/ota/tools.py",
+      "line": 510,
+      "parameters": [
+        "order_id"
+      ]
+    },
+    "pay_flight_order": {
+      "domain": "ota",
+      "type": "WRITE",
+      "source": "src/vita/domains/ota/tools.py",
+      "line": 524,
+      "parameters": [
+        "order_id"
+      ]
+    },
+    "pay_train_order": {
+      "domain": "ota",
+      "type": "WRITE",
+      "source": "src/vita/domains/ota/tools.py",
+      "line": 538,
+      "parameters": [
+        "order_id"
+      ]
+    },
+    "search_hotel_order": {
+      "domain": "ota",
+      "type": "READ",
+      "source": "src/vita/domains/ota/tools.py",
+      "line": 552,
+      "parameters": [
+        "user_id",
+        "date",
+        "status"
+      ]
+    },
+    "search_attraction_order": {
+      "domain": "ota",
+      "type": "READ",
+      "source": "src/vita/domains/ota/tools.py",
+      "line": 588,
+      "parameters": [
+        "user_id",
+        "date",
+        "status"
+      ]
+    },
+    "search_flight_order": {
+      "domain": "ota",
+      "type": "READ",
+      "source": "src/vita/domains/ota/tools.py",
+      "line": 622,
+      "parameters": [
+        "user_id",
+        "date",
+        "status"
+      ]
+    },
+    "search_train_order": {
+      "domain": "ota",
+      "type": "READ",
+      "source": "src/vita/domains/ota/tools.py",
+      "line": 655,
+      "parameters": [
+        "user_id",
+        "date",
+        "status"
+      ]
+    },
+    "get_hotel_order_detail": {
+      "domain": "ota",
+      "type": "READ",
+      "source": "src/vita/domains/ota/tools.py",
+      "line": 687,
+      "parameters": [
+        "order_id"
+      ]
+    },
+    "get_attraction_order_detail": {
+      "domain": "ota",
+      "type": "READ",
+      "source": "src/vita/domains/ota/tools.py",
+      "line": 696,
+      "parameters": [
+        "order_id"
+      ]
+    },
+    "get_flight_order_detail": {
+      "domain": "ota",
+      "type": "READ",
+      "source": "src/vita/domains/ota/tools.py",
+      "line": 705,
+      "parameters": [
+        "order_id"
+      ]
+    },
+    "get_train_order_detail": {
+      "domain": "ota",
+      "type": "READ",
+      "source": "src/vita/domains/ota/tools.py",
+      "line": 714,
+      "parameters": [
+        "order_id"
+      ]
+    },
+    "modify_train_order": {
+      "domain": "ota",
+      "type": "WRITE",
+      "source": "src/vita/domains/ota/tools.py",
+      "line": 723,
+      "parameters": [
+        "order_id",
+        "user_id",
+        "new_date"
+      ]
+    },
+    "modify_flight_order": {
+      "domain": "ota",
+      "type": "WRITE",
+      "source": "src/vita/domains/ota/tools.py",
+      "line": 787,
+      "parameters": [
+        "order_id",
+        "user_id",
+        "new_date"
+      ]
+    },
+    "cancel_hotel_order": {
+      "domain": "ota",
+      "type": "WRITE",
+      "source": "src/vita/domains/ota/tools.py",
+      "line": 850,
+      "parameters": [
+        "order_id",
+        "user_id"
+      ]
+    },
+    "cancel_attraction_order": {
+      "domain": "ota",
+      "type": "WRITE",
+      "source": "src/vita/domains/ota/tools.py",
+      "line": 871,
+      "parameters": [
+        "order_id",
+        "user_id"
+      ]
+    },
+    "cancel_flight_order": {
+      "domain": "ota",
+      "type": "WRITE",
+      "source": "src/vita/domains/ota/tools.py",
+      "line": 892,
+      "parameters": [
+        "order_id",
+        "user_id"
+      ]
+    },
+    "cancel_train_order": {
+      "domain": "ota",
+      "type": "WRITE",
+      "source": "src/vita/domains/ota/tools.py",
+      "line": 913,
+      "parameters": [
+        "order_id",
+        "user_id"
+      ]
+    },
+    "get_taxi_info": {
+      "domain": "ota",
+      "type": "READ",
+      "source": "src/vita/domains/ota/tools.py",
+      "line": 936,
+      "parameters": [
+        "taxi_id"
+      ]
+    },
+    "taxi_search": {
+      "domain": "ota",
+      "type": "READ",
+      "source": "src/vita/domains/ota/tools.py",
+      "line": 947,
+      "parameters": [
+        "departure_location",
+        "arrival_location"
+      ]
+    },
+    "create_taxi_order": {
+      "domain": "ota",
+      "type": "WRITE",
+      "source": "src/vita/domains/ota/tools.py",
+      "line": 969,
+      "parameters": [
+        "taxi_id",
+        "product_id",
+        "user_id",
+        "quantity"
+      ]
+    },
+    "pay_taxi_order": {
+      "domain": "ota",
+      "type": "WRITE",
+      "source": "src/vita/domains/ota/tools.py",
+      "line": 1014,
+      "parameters": [
+        "order_id"
+      ]
+    },
+    "cancel_taxi_order": {
+      "domain": "ota",
+      "type": "WRITE",
+      "source": "src/vita/domains/ota/tools.py",
+      "line": 1028,
+      "parameters": [
+        "order_id",
+        "user_id"
+      ]
+    },
+    "search_taxi_order": {
+      "domain": "ota",
+      "type": "READ",
+      "source": "src/vita/domains/ota/tools.py",
+      "line": 1049,
+      "parameters": [
+        "user_id",
+        "status"
+      ]
+    },
+    "get_taxi_order_detail": {
+      "domain": "ota",
+      "type": "READ",
+      "source": "src/vita/domains/ota/tools.py",
+      "line": 1064,
+      "parameters": [
+        "order_id"
+      ]
+    },
+    "longitude_latitude_to_distance": {
+      "domain": "common",
+      "type": "GENERIC",
+      "source": "src/vita/environment/toolkit.py",
+      "line": 271,
+      "parameters": [
+        "longitude1",
+        "latitude1",
+        "longitude2",
+        "latitude2"
+      ]
+    },
+    "weather": {
+      "domain": "common",
+      "type": "GENERIC",
+      "source": "src/vita/environment/toolkit.py",
+      "line": 286,
+      "parameters": [
+        "address",
+        "date_start",
+        "date_end"
+      ]
+    },
+    "address_to_longitude_latitude": {
+      "domain": "common",
+      "type": "GENERIC",
+      "source": "src/vita/environment/toolkit.py",
+      "line": 316,
+      "parameters": [
+        "address"
+      ]
+    },
+    "get_date_holiday_info": {
+      "domain": "common",
+      "type": "GENERIC",
+      "source": "src/vita/environment/toolkit.py",
+      "line": 326,
+      "parameters": [
+        "date"
+      ]
+    },
+    "get_holiday_date": {
+      "domain": "common",
+      "type": "GENERIC",
+      "source": "src/vita/environment/toolkit.py",
+      "line": 334,
+      "parameters": [
+        "year",
+        "holiday_name"
+      ]
+    },
+    "get_user_all_orders": {
+      "domain": "common",
+      "type": "READ",
+      "source": "src/vita/environment/toolkit.py",
+      "line": 437,
+      "parameters": []
+    },
+    "get_nearby": {
+      "domain": "common",
+      "type": "READ",
+      "source": "src/vita/environment/toolkit.py",
+      "line": 444,
+      "parameters": [
+        "longitude",
+        "latitude",
+        "range"
+      ]
+    }
+  }
+}

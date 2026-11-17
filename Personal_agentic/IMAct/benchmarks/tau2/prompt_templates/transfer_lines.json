@@ -1,0 +1,10 @@
+{
+ "english": "YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.",
+ "localized": {
+  "es": "Le voy a comunicar con un agente. Por favor, permanezca en la línea.",
+  "hi": "आपको एक प्रतिनिधि से जोड़ा जा रहा है। कृपया प्रतीक्षा करें।",
+  "ko": "상담원에게 연결해 드리겠습니다. 잠시만 기다려 주세요.",
+  "pt": "Vou transferir você para um atendente. Por favor, aguarde.",
+  "zh": "现在为您转接人工客服，请稍候。"
+ }
+}

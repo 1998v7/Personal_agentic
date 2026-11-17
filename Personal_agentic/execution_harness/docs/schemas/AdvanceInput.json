@@ -1,0 +1,475 @@
+{
+  "$defs": {
+    "MemoryPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "default": "not_requested",
+          "enum": [
+            "ok",
+            "empty",
+            "error",
+            "not_requested"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "context": {
+          "default": "",
+          "title": "Context",
+          "type": "string"
+        },
+        "error": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Error"
+        }
+      },
+      "title": "MemoryPayload",
+      "type": "object"
+    },
+    "MemoryResultEvent": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "ok",
+            "empty",
+            "error"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "context": {
+          "default": "",
+          "title": "Context",
+          "type": "string"
+        },
+        "error": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Error"
+        },
+        "type": {
+          "const": "memory_result",
+          "title": "Type",
+          "type": "string"
+        },
+        "request_id": {
+          "minLength": 1,
+          "title": "Request Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "status",
+        "type",
+        "request_id"
+      ],
+      "title": "MemoryResultEvent",
+      "type": "object"
+    },
+    "ResumeEvent": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "resume",
+          "title": "Type",
+          "type": "string"
+        },
+        "additional_turns": {
+          "default": 100,
+          "maximum": 10000,
+          "minimum": 1,
+          "title": "Additional Turns",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "title": "ResumeEvent",
+      "type": "object"
+    },
+    "StartEvent": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "start",
+          "title": "Type",
+          "type": "string"
+        },
+        "query": {
+          "minLength": 1,
+          "title": "Query",
+          "type": "string"
+        },
+        "domain": {
+          "default": "delivery",
+          "title": "Domain",
+          "type": "string"
+        },
+        "system_prompt": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "System Prompt"
+        },
+        "system_ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "System Ref"
+        },
+        "tools": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/ToolDefinition"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tools"
+        },
+        "tools_ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tools Ref"
+        },
+        "history": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "History"
+        },
+        "history_ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "History Ref"
+        },
+        "memory": {
+          "$ref": "#/$defs/MemoryPayload"
+        },
+        "memory_mode": {
+          "default": "external",
+          "enum": [
+            "external",
+            "benchmark"
+          ],
+          "title": "Memory Mode",
+          "type": "string"
+        },
+        "max_turns": {
+          "default": 100,
+          "maximum": 10000,
+          "minimum": 1,
+          "title": "Max Turns",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "type",
+        "query"
+      ],
+      "title": "StartEvent",
+      "type": "object"
+    },
+    "TerminateEvent": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "terminate",
+          "title": "Type",
+          "type": "string"
+        },
+        "reason": {
+          "default": "user_stop",
+          "enum": [
+            "cancelled",
+            "user_stop",
+            "max_turns",
+            "infrastructure_error"
+          ],
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "title": "TerminateEvent",
+      "type": "object"
+    },
+    "ToolDefinition": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "function",
+          "default": "function",
+          "title": "Type",
+          "type": "string"
+        },
+        "function": {
+          "$ref": "#/$defs/ToolFunction"
+        }
+      },
+      "required": [
+        "function"
+      ],
+      "title": "ToolDefinition",
+      "type": "object"
+    },
+    "ToolFunction": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "description": {
+          "default": "",
+          "title": "Description",
+          "type": "string"
+        },
+        "parameters": {
+          "additionalProperties": true,
+          "title": "Parameters",
+          "type": "object"
+        },
+        "strict": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Strict"
+        }
+      },
+      "required": [
+        "name",
+        "parameters"
+      ],
+      "title": "ToolFunction",
+      "type": "object"
+    },
+    "ToolResult": {
+      "additionalProperties": false,
+      "properties": {
+        "call_id": {
+          "minLength": 1,
+          "title": "Call Id",
+          "type": "string"
+        },
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "delivery": {
+          "enum": [
+            "received",
+            "unknown"
+          ],
+          "title": "Delivery",
+          "type": "string"
+        },
+        "content": {
+          "default": null,
+          "title": "Content"
+        }
+      },
+      "required": [
+        "call_id",
+        "name",
+        "delivery"
+      ],
+      "title": "ToolResult",
+      "type": "object"
+    },
+    "ToolResultsEvent": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "tool_results",
+          "title": "Type",
+          "type": "string"
+        },
+        "results": {
+          "items": {
+            "$ref": "#/$defs/ToolResult"
+          },
+          "minItems": 1,
+          "title": "Results",
+          "type": "array"
+        }
+      },
+      "required": [
+        "type",
+        "results"
+      ],
+      "title": "ToolResultsEvent",
+      "type": "object"
+    },
+    "UserMessageEvent": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "user_message",
+          "title": "Type",
+          "type": "string"
+        },
+        "content": {
+          "minLength": 1,
+          "title": "Content",
+          "type": "string"
+        },
+        "reply_to": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reply To"
+        },
+        "allowed_clears": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Allowed Clears",
+          "type": "array"
+        }
+      },
+      "required": [
+        "type",
+        "content"
+      ],
+      "title": "UserMessageEvent",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "task_id": {
+      "minLength": 1,
+      "title": "Task Id",
+      "type": "string"
+    },
+    "event_id": {
+      "minLength": 1,
+      "title": "Event Id",
+      "type": "string"
+    },
+    "base_rev": {
+      "minimum": 0,
+      "title": "Base Rev",
+      "type": "integer"
+    },
+    "event": {
+      "discriminator": {
+        "mapping": {
+          "memory_result": "#/$defs/MemoryResultEvent",
+          "resume": "#/$defs/ResumeEvent",
+          "start": "#/$defs/StartEvent",
+          "terminate": "#/$defs/TerminateEvent",
+          "tool_results": "#/$defs/ToolResultsEvent",
+          "user_message": "#/$defs/UserMessageEvent"
+        },
+        "propertyName": "type"
+      },
+      "oneOf": [
+        {
+          "$ref": "#/$defs/StartEvent"
+        },
+        {
+          "$ref": "#/$defs/UserMessageEvent"
+        },
+        {
+          "$ref": "#/$defs/ToolResultsEvent"
+        },
+        {
+          "$ref": "#/$defs/MemoryResultEvent"
+        },
+        {
+          "$ref": "#/$defs/TerminateEvent"
+        },
+        {
+          "$ref": "#/$defs/ResumeEvent"
+        }
+      ],
+      "title": "Event"
+    },
+    "metadata": {
+      "additionalProperties": true,
+      "title": "Metadata",
+      "type": "object"
+    }
+  },
+  "required": [
+    "task_id",
+    "event_id",
+    "base_rev",
+    "event"
+  ],
+  "title": "AdvanceInput",
+  "type": "object"
+}

@@ -1,0 +1,9 @@
+本目录中的 data_model/、environment/、domains/、utils/、prompts/ 派生自
+https://github.com/meituan-longcat/VitaBench-2.0 (commit f60169e89f30499cb7883f3dad76bd03facc908d,MIT,见 LICENSE),
+按 IMAct 的需要做了裁剪与改写:去掉对上游 `vita` 包、loguru、OpenAI SDK 的依赖,消息模型改用 IMAct.harness.messages。
+
+IMAct/harness/(对话循环、用户模拟器)与 IMAct/evaluation/vitabench.py(滑动窗口 rubric 评分,含其 prompt 模板)
+按上游 orchestrator、user、evaluator 的行为重新实现,并经新旧对拍确认一致,其中的模板文本沿用上游。
+
+数据集不随源码提交。任务文件按 IMACT_VITABENCH_TASKS → data/vitabench/ 的顺序查找。
+这部分是 bench 专属代码,放弃 VitaBench 时整个目录删除即可,不影响 harness/ 与 evaluation/base.py。

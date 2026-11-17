@@ -1,0 +1,538 @@
+[
+  {
+    "type": "function",
+    "function": {
+      "name": "delivery_distance_to_time",
+      "description": "根据距离（米）计算外卖配送时间（分钟）\n\nPreconditions:\n    - 根据从商家到用户地址的距离计算外卖配送时间\nPostconditions:\n    - 返回配送时间（分钟）",
+      "parameters": {
+        "properties": {
+          "distance": {
+            "description": "距离（以米为单位）",
+            "title": "Distance",
+            "type": "number"
+          }
+        },
+        "required": [
+          "distance"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_delivery_store_info",
+      "description": "获取商家信息，包括商家id、评分、地址、经度、纬度、标签、商品列表\n\nPreconditions:\n    - 处于外卖场景，需要获取商家的详细信息\nPostconditions:\n    - 返回商家的详细信息",
+      "parameters": {
+        "properties": {
+          "store_id": {
+            "description": "商家id",
+            "title": "Store Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "store_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_delivery_product_info",
+      "description": "获取商品信息，包括商品名称、商品id、商店名称、商店id、商品评分、商品价格、商品标签\n\nPreconditions:\n    - 处于外卖场景，需要获取商品的详细信息\nPostconditions:\n    - 返回商品的详细信息",
+      "parameters": {
+        "properties": {
+          "product_id": {
+            "title": "Product Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "product_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "delivery_store_search_recommand",
+      "description": "在外卖场景下，可以根据用户表达抽取出描述商家的关键词，搜索或推荐多个商家\n\nPreconditions:\n    - 处于外卖场景，获取描述商家的关键词\nPostconditions:\n    - 返回商家列表，引导用户选择确定商家",
+      "parameters": {
+        "properties": {
+          "keywords": {
+            "description": "描述商家的关键词",
+            "items": {
+              "type": "string"
+            },
+            "title": "Keywords",
+            "type": "array"
+          }
+        },
+        "required": [
+          "keywords"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "delivery_product_search_recommand",
+      "description": "在外卖场景下，可以根据用户表达抽取出描述商品的关键词，搜索或推荐多个商品\n\nPreconditions:\n    - 处于外卖场景，获取描述商品的关键词\nPostconditions:\n    - 返回商品列表，引导用户选择商品并创建订单",
+      "parameters": {
+        "properties": {
+          "keywords": {
+            "description": "描述商品的关键词",
+            "items": {
+              "type": "string"
+            },
+            "title": "Keywords",
+            "type": "array"
+          }
+        },
+        "required": [
+          "keywords"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "create_delivery_order",
+      "description": "外卖订单创建，仅支持单个商家下单，单个商家可以下单多个商品\n\nPreconditions:\n    - 处于外卖场景，确定唯一一个店家id和一个或多个商品id，确定用户的饮食禁忌，并在订单中体现\nPostconditions:\n    - 返回订单信息，询问用户是否支付订单",
+      "parameters": {
+        "properties": {
+          "user_id": {
+            "description": "用户id",
+            "title": "User Id",
+            "type": "string"
+          },
+          "store_id": {
+            "description": "商店id",
+            "title": "Store Id",
+            "type": "string"
+          },
+          "product_ids": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Product Ids",
+            "type": "array"
+          },
+          "product_cnts": {
+            "items": {
+              "type": "integer"
+            },
+            "title": "Product Cnts",
+            "type": "array"
+          },
+          "address": {
+            "description": "外卖配送目标地址",
+            "title": "Address",
+            "type": "string"
+          },
+          "dispatch_time": {
+            "description": "外卖订单开始配送的时间（即骑手从商家取餐出发的时间），格式为yyyy-mm-dd HH:MM:SS",
+            "title": "Dispatch Time",
+            "type": "string"
+          },
+          "attributes": {
+            "default": null,
+            "description": "商品id对应商品规格属性",
+            "title": "Attributes",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "note": {
+            "default": "",
+            "description": "订单备注（禁止将用户关于时间等需求直接放在备注中），如饮食禁忌信息说明",
+            "title": "Note",
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id",
+          "store_id",
+          "product_ids",
+          "product_cnts",
+          "address",
+          "dispatch_time"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "pay_delivery_order",
+      "description": "在外卖场景下，上文有订单信息，用户表达确认支付，或者重新支付\n\nPreconditions:\n    - 处于外卖场景，用户表达确认支付，订单创建完成并进入支付环节｜用户表示重新支付\nPostconditions:\n    - 返回支付结果信息",
+      "parameters": {
+        "properties": {
+          "order_id": {
+            "description": "订单id",
+            "title": "Order Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "order_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_delivery_order_status",
+      "description": "获取订单状态\n\nPreconditions:\n    - 查询外卖订单状态\nPostconditions:\n    - 返回订单状态信息",
+      "parameters": {
+        "properties": {
+          "order_id": {
+            "description": "订单id",
+            "title": "Order Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "order_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "cancel_delivery_order",
+      "description": "用户取消订单，或者用户取消支付。禁止对处于已取消状态的订单再次取消。\n\nPreconditions:\n    - 查询外卖订单状态，确保订单状态为非cancelled\nPostconditions:\n    - 返回取消订单结果信息",
+      "parameters": {
+        "properties": {
+          "order_id": {
+            "description": "订单id",
+            "title": "Order Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "order_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "modify_delivery_order",
+      "description": "修改订单备注信息\n\nPreconditions:\n    - 上文确定唯一一个外卖order_id，用户需要修改外卖订单备注\nPostconditions:\n    - 输出修改后订单信息，如果订单还未支付则需要用户确认支付",
+      "parameters": {
+        "properties": {
+          "order_id": {
+            "description": "订单id",
+            "title": "Order Id",
+            "type": "string"
+          },
+          "note": {
+            "description": "新的订单备注信息",
+            "title": "Note",
+            "type": "string"
+          }
+        },
+        "required": [
+          "order_id",
+          "note"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "search_delivery_orders",
+      "description": "查询所有外卖订单，返回包含订单ID、订单类型、用户ID、商家ID、总价、下单时间、更新时间、订单状态等信息\n\nPreconditions:\n    - 按照查询条件查看所有外卖订单\nPostconditions:\n    - 返回所有符合条件外卖订单的详细信息",
+      "parameters": {
+        "properties": {
+          "user_id": {
+            "description": "用户ID",
+            "title": "User Id",
+            "type": "string"
+          },
+          "status": {
+            "default": "unpaid",
+            "description": "订单状态，默认为未支付",
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_delivery_order_detail",
+      "description": "根据订单ID查询外卖订单，返回包含订单ID、订单类型、商家ID、配送时间、配送耗时、送达时间、总价、下单时间、更新时间、订单状态和商品列表等详细信息\n\nPreconditions:\n    - 上文确定唯一一个外卖order_id\nPostconditions:\n    - 返回指定订单详细信息",
+      "parameters": {
+        "properties": {
+          "order_id": {
+            "description": "订单id",
+            "title": "Order Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "order_id"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "longitude_latitude_to_distance",
+      "description": "根据经纬度计算两点之间的距离（以米为单位）\n\nPreconditions:\n    - 根据两个点的经纬度计算它们之间的距离\nPostconditions:\n    - 返回两点之间的距离（整数，以米为单位）",
+      "parameters": {
+        "properties": {
+          "longitude1": {
+            "description": "第一个点的经度",
+            "title": "Longitude1",
+            "type": "number"
+          },
+          "latitude1": {
+            "description": "第一个点的纬度",
+            "title": "Latitude1",
+            "type": "number"
+          },
+          "longitude2": {
+            "description": "第二个点的经度",
+            "title": "Longitude2",
+            "type": "number"
+          },
+          "latitude2": {
+            "description": "第二个点的纬度",
+            "title": "Latitude2",
+            "type": "number"
+          }
+        },
+        "required": [
+          "longitude1",
+          "latitude1",
+          "longitude2",
+          "latitude2"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "weather",
+      "description": "查询指定地址在date_start到date_end期间的天气信息\n\nPreconditions:\n    - 查询指定地址在指定日期范围内的天气信息\nPostconditions:\n    - 返回天气信息",
+      "parameters": {
+        "properties": {
+          "address": {
+            "description": "要查询的地址",
+            "title": "Address",
+            "type": "string"
+          },
+          "date_start": {
+            "description": "开始时间，格式为 yyyy-mm-dd",
+            "title": "Date Start",
+            "type": "string"
+          },
+          "date_end": {
+            "description": "结束时间，格式为 yyyy-mm-dd",
+            "title": "Date End",
+            "type": "string"
+          }
+        },
+        "required": [
+          "address",
+          "date_start",
+          "date_end"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "address_to_longitude_latitude",
+      "description": "根据地址获取经纬度\n\nPreconditions:\n    - 根据地址获取对应的经纬度坐标\nPostconditions:\n    - 返回经纬度坐标",
+      "parameters": {
+        "properties": {
+          "address": {
+            "description": "要查询的地址",
+            "title": "Address",
+            "type": "string"
+          }
+        },
+        "required": [
+          "address"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_date_holiday_info",
+      "description": "判断某日期是否为中国节假日；如果是则返回节假日中文名称\n\nPreconditions:\n    - 根据日期判断是否为节假日，如果是则返回节假日名称\nPostconditions:\n    - 返回节假日信息",
+      "parameters": {
+        "properties": {
+          "date": {
+            "description": "日期，格式为 yyyy-mm-dd",
+            "title": "Date",
+            "type": "string"
+          }
+        },
+        "required": [
+          "date"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_holiday_date",
+      "description": "获取指定年份中某个节假日对应的具体日期\n\nPreconditions:\n    - 获取指定年份中某个节假日的具体日期\nPostconditions:\n    - 返回节假日的日期",
+      "parameters": {
+        "properties": {
+          "year": {
+            "description": "年份",
+            "title": "Year",
+            "type": "string"
+          },
+          "holiday_name": {
+            "description": "节假日名称，仅支持中文表述",
+            "title": "Holiday Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "year",
+          "holiday_name"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_user_all_orders",
+      "description": "获取用户所有订单信息\n\nPreconditions:\n    - 获取用户的所有订单信息\nPostconditions:\n    - 返回用户所有订单信息\n\nArgs:\n\nReturns:\n    用户所有订单信息摘要",
+      "parameters": {
+        "properties": {},
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_nearby",
+      "description": "获取附近所有商店/商业场所的信息\n\nPreconditions:\n    - 获取指定范围内（米）的所有商业场所（商店、机场或火车站、酒店、景点、商铺等）的信息\nPostconditions:\n    - 返回商业场所信息",
+      "parameters": {
+        "properties": {
+          "longitude": {
+            "description": "经度",
+            "title": "Longitude",
+            "type": "number"
+          },
+          "latitude": {
+            "description": "纬度",
+            "title": "Latitude",
+            "type": "number"
+          },
+          "range": {
+            "description": "范围（以米为单位）",
+            "title": "Range",
+            "type": "number"
+          }
+        },
+        "required": [
+          "longitude",
+          "latitude",
+          "range"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "read_preference_memory",
+      "description": "读取用户偏好记忆，获取关于用户偏好的完整知识",
+      "parameters": {
+        "properties": {},
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "query_preference_memory",
+      "description": "根据具体问题查询用户偏好记忆",
+      "parameters": {
+        "properties": {
+          "query": {
+            "title": "Query",
+            "type": "string"
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "title": "parameters",
+        "type": "object"
+      }
+    }
+  }
+]

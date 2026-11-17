@@ -1,0 +1,274 @@
+{
+"0/0": [
+"ok",
+{
+"repo": "travel-planner-app"
+}
+],
+"0/1": [
+"err",
+"ValueError",
+"Invalid input argument in `cleanup_args`: repo"
+],
+"0/10": [
+"err",
+"TypeError",
+"string indices must be integers, not 'str'"
+],
+"0/11": [
+"ok",
+{
+"x": "travel-planner-app"
+}
+],
+"0/2": [
+"ok",
+{
+"page": "abc-123"
+}
+],
+"0/3": [
+"ok",
+{
+"a": [
+"travel-planner-app",
+3,
+"plain"
+],
+"b": {
+"c": "travel-planner-app"
+}
+}
+],
+"0/4": [
+"ok",
+"travel-planner-app"
+],
+"0/5": [
+"ok",
+"no dollar"
+],
+"0/6": [
+"err",
+"ValueError",
+"Format error in `cleanup_args`: pre$name"
+],
+"0/7": [
+"err",
+"ValueError",
+"Invalid input argument in `cleanup_args`: missing"
+],
+"0/8": [
+"err",
+"ValueError",
+"Invalid operation in `cleanup_args`: bogus"
+],
+"0/9": [
+"err",
+"IndexError",
+"list index out of range"
+],
+"1/0": [
+"err",
+"ValueError",
+"Invalid input argument in `cleanup_args`: name"
+],
+"1/1": [
+"ok",
+{
+"repo": "TravelPlanner"
+}
+],
+"1/10": [
+"err",
+"ValueError",
+"Invalid input argument in `cleanup_args`: name"
+],
+"1/11": [
+"err",
+"ValueError",
+"Invalid input argument in `cleanup_args`: name"
+],
+"1/2": [
+"err",
+"JSONDecodeError",
+"Expecting property name enclosed in double quotes: line 1 column 2 (char 1)"
+],
+"1/3": [
+"err",
+"ValueError",
+"Invalid input argument in `cleanup_args`: name"
+],
+"1/4": [
+"err",
+"ValueError",
+"Invalid input argument in `cleanup_args`: name"
+],
+"1/5": [
+"ok",
+"no dollar"
+],
+"1/6": [
+"err",
+"ValueError",
+"Format error in `cleanup_args`: pre$name"
+],
+"1/7": [
+"err",
+"ValueError",
+"Invalid input argument in `cleanup_args`: missing"
+],
+"1/8": [
+"err",
+"ValueError",
+"Invalid operation in `cleanup_args`: bogus"
+],
+"1/9": [
+"err",
+"IndexError",
+"list index out of range"
+],
+"2/0": [
+"ok",
+{
+"repo": "x"
+}
+],
+"2/1": [
+"err",
+"ValueError",
+"Invalid input argument in `cleanup_args`: repo"
+],
+"2/10": [
+"err",
+"TypeError",
+"string indices must be integers, not 'str'"
+],
+"2/11": [
+"ok",
+{
+"x": "x"
+}
+],
+"2/2": [
+"err",
+"TypeError",
+"string indices must be integers, not 'str'"
+],
+"2/3": [
+"ok",
+{
+"a": [
+"x",
+3,
+"plain"
+],
+"b": {
+"c": "x"
+}
+}
+],
+"2/4": [
+"ok",
+"x"
+],
+"2/5": [
+"ok",
+"no dollar"
+],
+"2/6": [
+"err",
+"ValueError",
+"Format error in `cleanup_args`: pre$name"
+],
+"2/7": [
+"err",
+"ValueError",
+"Invalid input argument in `cleanup_args`: missing"
+],
+"2/8": [
+"err",
+"ValueError",
+"Invalid operation in `cleanup_args`: bogus"
+],
+"2/9": [
+"err",
+"TypeError",
+"string indices must be integers, not 'str'"
+],
+"3/0": [
+"ok",
+{
+"repo": "$name"
+}
+],
+"3/1": [
+"ok",
+{
+"repo": "$repo"
+}
+],
+"3/10": [
+"ok",
+{
+"x": "$name -> get(k)"
+}
+],
+"3/11": [
+"ok",
+{
+"x": " $name "
+}
+],
+"3/2": [
+"ok",
+{
+"page": "$return -> get(content) -> array(0) -> get(text) -> json -> get(id)"
+}
+],
+"3/3": [
+"ok",
+{
+"a": [
+"$name",
+3,
+"plain"
+],
+"b": {
+"c": "$name"
+}
+}
+],
+"3/4": [
+"ok",
+"$name"
+],
+"3/5": [
+"ok",
+"no dollar"
+],
+"3/6": [
+"ok",
+{
+"x": "pre$name"
+}
+],
+"3/7": [
+"ok",
+{
+"x": "$missing"
+}
+],
+"3/8": [
+"ok",
+{
+"x": "$return -> bogus(1)"
+}
+],
+"3/9": [
+"ok",
+{
+"x": "$return -> get(content) -> array(5)"
+}
+]
+}

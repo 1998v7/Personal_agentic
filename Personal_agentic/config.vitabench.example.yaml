@@ -1,0 +1,44 @@
+# 运行配置只管理执行层和 Memory。模型/API/鉴权/请求参数统一在 models.yaml。
+# models_file 相对此运行配置文件解析,不依赖启动目录。
+models_file: models.yaml
+
+model_call:
+  response_format: text  # 执行层的 JSON 输出约定;网关支持时可用 json_object
+
+# ---- 执行层 ----
+exec:
+  # src: ../some/path/to/execution_harness/src   # 缺省走环境变量 IMACT_EXEC_HARNESS_SRC 或仓库内默认位置
+  context_max_bytes: 240000
+  # decision_timeout_s:            # 缺省 max(120, 模型超时+30)
+
+max_turns: 200                     # 每个 subtask 内执行层允许的决策轮数
+max_memory_hops: 3
+
+# ---- 重试:任务级由 VitaBench 负责(--max-task-retries,默认 3) ----
+retry:
+  model_call:                      # 模型决策失败后,用相同请求重投;同时决定执行层的尝试上限(= max_retries + 1)
+    max_retries: 3
+    backoff_s: 1.0
+    backoff_factor: 2.0
+    max_backoff_s: 30.0
+
+# ---- Memory: local=进程内调用 / mps=HTTP 网关 / none=关闭 ----
+memory:
+  backend: local                  # 省略时兼容旧配置,默认 mps
+  prefetch: true                   # subtask 开始时按指令预取一次
+  require_prefetch: true           # 首轮记忆失败则停止,不把无记忆运行当作联调成功
+  timestamp_mode: raw              # local 始终使用任务原始 current_time;仅 mps 可选 date
+  active_query_text: question      # 模型主动 query_memory 时传给网关的 user_query:question | instruction
+  local:
+    # 路径相对本 YAML;与 Personal_IMAct 同级放置 IMAct_memory。
+    client_path: ../IMAct_memory/personal_memory_maya/examples/query_memory.py
+    config_path: ../IMAct_memory/personal_memory_maya/harness_config.json
+    bench: vitabench
+  retry: {max_retries: 1, backoff_s: 0.5}
+  gateway:
+    url: ""                        # 为空=不启用 Memory,个性化记忆不会生效。例如 https://paiplusinferencepre.alipay.com/inference/<id>/V0.1
+    bench: vitabench
+    app_name: imact                # MPS-app-name
+    timeout_s: 8                   # 网关侧 8s 超时
+    # api_key_env: MEMORY_API_KEY  # 网关需要鉴权时再配,文档示例里没有
+    max_concurrency: 16

@@ -1,0 +1,3 @@
+## FINAL REMINDER
+Every ${unit} you ${act} to the agent is in ${language} — never in English.
+Special tokens (###STOP###, ###TRANSFER###, ###OUT-OF-SCOPE###) stay verbatim, in ASCII, exactly as written.

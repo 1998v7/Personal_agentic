@@ -1,0 +1,9 @@
+{
+ "medium_upper": "CONVERSATION",
+ "medium": "conversation",
+ "unit": "message",
+ "act": "write",
+ "register": "written",
+ "setting": "in the conversation",
+ "content": "message content"
+}

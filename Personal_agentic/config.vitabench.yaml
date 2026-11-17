@@ -1,0 +1,22 @@
+models_file: models.yaml  # 相对此文件所在目录;所有角色与请求参数统一在此配置
+model_call:
+  response_format: text
+exec:
+  context_max_bytes: 240000
+max_turns: 200
+retry:
+  model_call: {max_retries: 3, backoff_s: 1.0}
+memory:
+  backend: local
+  prefetch: true
+  require_prefetch: true
+  timestamp_mode: raw
+  local:
+    client_path: ../IMAct_memory/personal_memory_maya/examples/query_memory.py
+    config_path: ../IMAct_memory/personal_memory_maya/harness_config.json
+    bench: vitabench
+  gateway:
+    url: "https://paiplusinferencepre.alipay.com/inference/2220c69b1f3f829b_identity_memory/V0.1"
+    bench: vitabench
+    app_name: imact
+    timeout_s: 12

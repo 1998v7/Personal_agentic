@@ -1,0 +1,12 @@
+本目录中的 task_data/(任务 JSON,逐字节复制)、domains.yaml(各领域的 agent 设置与 task 列表)、prompt_templates/(ReAct 与工具说明模板,逐字复制)、
+checks/(各领域评分函数)派生自 https://github.com/SalesforceAIResearch/MCP-Universe (v1.1.3,Apache-2.0,见 LICENSE),
+其中 checks/ 保持上游的编码风格,与上游的差别仅是:导入路径;google_search.llm_as_a_judge 的裁判改走 models.yaml 的 judge 角色;
+notion.py 的 notion__search_page 改传纯字符串 query + 单独的 filter(网关上的 Notion MCP server 较新,拒绝上游把整个请求体序列化后塞进 query 的写法)。
+github.py 的 github__get_file_contents 在传 ref 的同时也传 branch(网关上的 github-mcp-server 较新,参数名是 branch,只传 ref 会读默认分支)。
+
+IMAct/harness/mcp.py(MCP 客户端)、IMAct/harness/react.py(ReAct 循环)与 IMAct/evaluation/mcp_universe.py(评分引擎)
+按上游的 mcp 客户端、ReAct agent 与 evaluator 的行为重新实现,并经新旧对拍确认一致。
+
+不含:3d_design(Blender)、MCPMark、deep research。
+服务不在本地运行:agent 与评分都经 MCP 网关访问真实服务(见仓库根目录的 README_MCP_UNIVERSE.md)。
+这部分是 bench 专属代码,放弃 MCP-Universe 时整个目录删除即可;harness/mcp.py、harness/react.py 与评分引擎是通用组件,可保留。

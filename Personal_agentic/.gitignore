@@ -1,0 +1,20 @@
+# 密钥与环境
+.env
+.venv/
+# 运行产物
+results/
+data/
+__pycache__/
+*.pyc
+*.sqlite3
+# 上游 VitaBench 的旧工作区(已不再使用;代码与数据都已迁入 IMAct/ 与 data/)
+VitaBench-2.0/
+# 压缩包残留
+__MACOSX/
+.DS_Store
+
+# 私有设计文档与无关脚手架
+/ref_doc/
+/ref-doc/
+/ai_code/
+/ai-code/

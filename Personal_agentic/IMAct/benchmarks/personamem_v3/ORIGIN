@@ -1,0 +1,17 @@
+pm3/ 派生自 https://github.com/bowen-upenn/PersonaMem-v3(代码 MIT,见 LICENSE;数据 CC-BY-NC-4.0,不随源码提交)。
+pm3/ 保持上游的目录结构与代码,与上游的差别只有四类机械改动(可用 diff 逐行核对):
+  1. 导入:evaluation / data_preparation / scripts 的绝对导入加了包前缀 IMAct.benchmarks.personamem_v3.pm3(145 处);
+  2. 文本读写补 encoding="utf-8"(上游依赖系统默认编码,中文 Windows 上会按 GBK 读;24 处);
+  3. evaluation/claude_subagent.py 换成桩:它只用于 Claude Code agent 模式,本接入只跑 llm_memory,真被调用时直接报错;
+  4. scripts/aggregate_eval.py 删去把仓库根目录插入 sys.path 的两行(否则同一模块会以两个名字被加载)。
+只移植了 llm_memory 模式评测所需的模块:题型 runner、prompt、评分、裁判、数据读取与汇总;
+数据生成流水线、mem0 / Claude Code / Codex / MCP agent 模式、审计脚本均未移植。
+
+IMAct 自己实现的部分(runner.py、scoring.py、run.py、download.py、data.py):
+  * 记忆来源:官方 llm_memory 的记忆块由本地 LLM 按天压缩;这里改为每道题向 Memory 服务 query 一次(统一调用接口),
+    返回的 context 按官方 4096 token 上限截断,再接上官方的日历块。这是本接入相对官方唯一的语义差别,也是被测的部分;
+  * 模型调用:官方的 QueryLLM 换成 IMAct 的 LLMCaller(models.yaml 的 action / judge 角色);
+  * 批处理、断点续跑、失败重试与结果落盘用 IMAct.harness.batch;汇总直接调用上游 aggregate_eval 的函数。
+经新旧对拍确认一致:3 个 persona、490 道题、30 个题型,每道题的模型 prompt、裁判 prompt、metrics、status 与上游逐项相同。
+
+这部分是 bench 专属代码,放弃 PersonaMem-v3 时整个目录删除即可。

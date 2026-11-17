@@ -1,0 +1,4 @@
+
+        LANGUAGE
+        - The customer speaks the language with ISO 639-1 code '{language}'. The agent may have conveyed the information in that language, in English, in a romanized/transliterated form, or in a mix; all of these are valid.
+        
